@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { useNavigate } from 'react-router-dom';
 import logo from "../../resource/images/mainLogo.png";
-import { register } from "../../api/api";
+import { login } from "../../api/api";
 import {useQuery} from "react-query";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -13,6 +13,8 @@ import { red } from "@material-ui/core/colors";
 
 import { useLocation } from "react-router-dom";
 
+import { useAuth } from "../../utils/auth";
+
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -20,14 +22,12 @@ const Alert = React.forwardRef(function Alert(props, ref) {
 
 export default function Login(props) {
 
-    const location = useLocation()
-    const { selectedRole } = location.state
-
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
-    const [role, setRole] = React.useState(selectedRole);
-    const [registerFlag, setRegisterFlag] = React.useState(false);
+    const [loginFlag, setLoginFlag] = React.useState(false);
     const [fail, setFail] = React.useState(false);
+
+    const auth = useAuth()
 
     const navigate = useNavigate();
 
@@ -56,7 +56,29 @@ export default function Login(props) {
 
       const classes = useStyles();
 
-   
+      useQuery(
+        ["login", { email: email, password: password}],
+        login,{
+        onSuccess: (data)=>{
+            console.log(data)
+            setLoginFlag(false)
+            if(!data.token){
+              console.log("No token received");
+            }
+            else{
+              console.log(data.user)
+              localStorage.setItem("token", data.token)
+              auth.login(data.user)
+              navigate("/profile")
+            }
+        },
+        onError: (err) =>{
+            console.log(err);
+            setFail(true);
+        },
+          enabled: loginFlag === true,
+        }
+      );
 
       const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
@@ -75,10 +97,7 @@ export default function Login(props) {
     const loginUser = async () =>{
         if(password.length>6 && email.length>6 && email.includes("@") && email.includes(".")){
             console.log("Logging In");
-            setRegisterFlag(true);
-            // register(email,password,userRole)
-            // .then((res) => console.log(res))
-            // .catch((err) => console.log(err.message));
+            setLoginFlag(true);
         }
         else {
             console.log("Unable to Login");
