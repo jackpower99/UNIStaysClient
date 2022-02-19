@@ -6,10 +6,11 @@ import UserRolePage from './pages/userRolePage';
 import ProfilePage from './pages/profilePage';
 import { QueryClientProvider, QueryClient } from "react-query";
 import { ReactQueryDevtools } from 'react-query/devtools';
-import { RequireAuth } from './components/requireAuth';
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { AuthProvider } from './utils/auth';
 import HomePage from './pages/homePage';
+import NavBar from './components/navBar';
+import RequireAuth from "./components/requireAuth";
+
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -21,26 +22,60 @@ const queryClient = new QueryClient({
   },
 });
 
+
+
 const App = () => {
 
+//   const [user, setUser] = useLocalStorage("user", localStorage.getItem("user"));
+
+//   const checkLoggedIn = async () => {
+
+//   let userLS = localStorage.getItem("user")
+
+//   const email = userLS?.email;
+//   const password = userLS?.password;
+//   const role = userLS?.role;
+
+//   const token = localStorage.getItem("token");
+
+//   if(userLS && token){
+//     setUser({email, password, token, role});
+//     console.log(user.email)
+//   }
+//   else{
+//     console.log("No logged in user")
+//   }
+  
+// };
+
+//   useEffect(() => {
+//     console.log('useEffect called');
+//     checkLoggedIn()
+//   }, []);
+
+
   return (
-    <AuthProvider>
+
     <QueryClientProvider client={queryClient}>
     <BrowserRouter>
+    <NavBar />
     <Routes>
       <Route exact path = "/login" element = {<LoginPage/>}></Route>
       <Route exact path = "/register" element = {<RegisterPage/>}></Route>
       <Route exact path = "/select-role" element = {<UserRolePage/>}></Route>
       <Route exact path = "/" element = {<HomePage/>}></Route>
 
-      <Route exact path = "/profile" element = {<RequireAuth><ProfilePage/></RequireAuth>}></Route>
-     
+      <Route element={<RequireAuth />}>
+      <Route exact path = "/profile" element = {<ProfilePage/>}></Route>
+      </Route>
+ 
       <Route exact path = "*" element = {<HomePage/>}></Route>
     </Routes>
     </BrowserRouter>
      <ReactQueryDevtools initialIsOpen={false} />
     </QueryClientProvider>
-    </AuthProvider>
+  
+
   )
 }
 ReactDOM.render(<App />,document.getElementById('root'));

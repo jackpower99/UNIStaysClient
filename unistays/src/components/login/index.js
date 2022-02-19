@@ -10,11 +10,7 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import { red } from "@material-ui/core/colors";
-
-import { useLocation } from "react-router-dom";
-
-import { useAuth } from "../../utils/auth";
-
+import Link from '@mui/material/Link';
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -26,8 +22,6 @@ export default function Login(props) {
     const [password, setPassword] = React.useState("");
     const [loginFlag, setLoginFlag] = React.useState(false);
     const [fail, setFail] = React.useState(false);
-
-    const auth = useAuth()
 
     const navigate = useNavigate();
 
@@ -66,17 +60,22 @@ export default function Login(props) {
               console.log("No token received");
             }
             else{
-              console.log(data.user)
-              localStorage.setItem("token", data.token)
-              auth.login(data.user)
-              navigate("/profile")
+              console.log(data.token)
+              const token = data.token;
+              const user = data.user;
+              localStorage.setItem("user", JSON.stringify(user));
+              localStorage.setItem("token", token);
+
+              console.log(localStorage.getItem("user"))
+              navigate("/", { replace: true})
             }
         },
         onError: (err) =>{
-            console.log(err);
-            setFail(true);
+          console.log(err);
+          setFail(true);
         },
           enabled: loginFlag === true,
+          cacheTime: 10000
         }
       );
 
@@ -137,6 +136,16 @@ return (
         value={password}
         onChange={e => setPassword(e.target.value)}
       />
+      <div>
+        <Typography variant="h7"
+        sx={{
+          fontStyle: 'oblique',
+          fontFamily: 'sans-serif',
+          textAlign: 'center',
+        }}>
+          Dont have an account? Click <Link href= "/select-role" underline="hover" color="inherit">here</Link> to register
+        </Typography>
+      </div>
       <div>
           <Button type="submit" variant="contained" color="primary">
           Login
