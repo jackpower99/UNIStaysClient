@@ -63,7 +63,7 @@ export default function Register(props) {
         onSuccess: (data)=>{
             console.log(data)
             setRegisterFlag(false)
-            navigate("/")
+            navigate("/student-form")
         },
         onError: (err) =>{
             console.log(err);
@@ -92,9 +92,6 @@ export default function Register(props) {
         if(password.length>6 && password === confirmPassword && email.length>6 && email.includes("@") && email.includes(".")){
             console.log("Registering");
             setRegisterFlag(true);
-            // register(email,password,userRole)
-            // .then((res) => console.log(res))
-            // .catch((err) => console.log(err.message));
         }
         else {
             console.log("Unable to Register");

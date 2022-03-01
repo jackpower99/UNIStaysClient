@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import ReactDOM from 'react-dom';
 import LoginPage from "./pages/loginPage"
 import RegisterPage from './pages/registerPage';
@@ -10,6 +10,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import HomePage from './pages/homePage';
 import NavBar from './components/navBar';
 import RequireAuth from "./components/requireAuth";
+import StudentFormPage from './pages/studentFormPage';
 
 
 const queryClient = new QueryClient({
@@ -26,34 +27,6 @@ const queryClient = new QueryClient({
 
 const App = () => {
 
-//   const [user, setUser] = useLocalStorage("user", localStorage.getItem("user"));
-
-//   const checkLoggedIn = async () => {
-
-//   let userLS = localStorage.getItem("user")
-
-//   const email = userLS?.email;
-//   const password = userLS?.password;
-//   const role = userLS?.role;
-
-//   const token = localStorage.getItem("token");
-
-//   if(userLS && token){
-//     setUser({email, password, token, role});
-//     console.log(user.email)
-//   }
-//   else{
-//     console.log("No logged in user")
-//   }
-  
-// };
-
-//   useEffect(() => {
-//     console.log('useEffect called');
-//     checkLoggedIn()
-//   }, []);
-
-
   return (
 
     <QueryClientProvider client={queryClient}>
@@ -63,6 +36,7 @@ const App = () => {
       <Route exact path = "/login" element = {<LoginPage/>}></Route>
       <Route exact path = "/register" element = {<RegisterPage/>}></Route>
       <Route exact path = "/select-role" element = {<UserRolePage/>}></Route>
+      <Route exact path = "/student-form" element = {<StudentFormPage />}></Route>
       <Route exact path = "/" element = {<HomePage/>}></Route>
 
       <Route element={<RequireAuth />}>
