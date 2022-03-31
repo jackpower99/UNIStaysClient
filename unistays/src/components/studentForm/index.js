@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 import { useNavigate } from 'react-router-dom';
 import logo from "../../resource/images/mainLogo.png";
-import { login, studentDetails } from "../../api/api";
+import { studentDetails, landlordDetails } from "../../api/api";
 import {useQuery} from "react-query";
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
@@ -19,6 +19,7 @@ import {DropzoneDialog} from 'material-ui-dropzone'
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { fontSize } from "@mui/system";
+import { useLocation } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -46,13 +47,39 @@ const Alert = React.forwardRef(function Alert(props, ref) {
         color: red
       },
     },
+    landord: {
+      display: 'flex',
+      flexWrap: "wrap",
+      flexDirection: "column",
+      alignItems: "center",
+      alignContent: "center",
+      justifyContent: "center",
+      gap: "15px",
+      maxHeight: "35vh",
+      padding:"60px",
+      maxWidth: "100vw",
+  
+      '& .MuiTextField-root': {
+        width: "20vw",
+        height: "5vh"
+      },
+      '& .MuiFormLabel-root':{
+        padding: "10px 0 0 0",
+      },
+      '& h6': {
+        color: red
+      },
+    }
   }));
 
 
 
-export default function StudentForm(props) {
+export default function StudentForm() {
 
-    const [studentEmail, setStudentEmail] = React.useState("");
+  const location = useLocation()
+  const role   = location.state.role;
+  const email = location.state.email;
+
     const [fname, setFname] = React.useState("");
     const [lname, setLname] = React.useState("");
     const [address, setAddress] = React.useState("");
@@ -62,9 +89,12 @@ export default function StudentForm(props) {
     const [yearOfStudy, setYearOfStudy] = React.useState("");
     const [allowShowLocation, setAllowShowLocation] = React.useState(false);
     const [files, setFiles] = React.useState([]);
-    const [hideForm, setHideForm] = React.useState("visible");
-
+    const [userRole, setUserRole] = React.useState(role);
+    const [userEmail, setUserEmail] = React.useState(email);
+ 
     const [submitFlag, setSubmitFlag] = React.useState(false);
+    const [submitLandlordFlag, setSubmitLandlordFlag] = React.useState(false);
+
     const [attachFilesFlag, setAttachFilesFlag] = React.useState(false);
 
     const [fail, setFail] = React.useState(false);
@@ -80,7 +110,7 @@ export default function StudentForm(props) {
 
       useQuery(
         ["studentDetails", { 
-          student_email: studentEmail,
+          email: userEmail,
           fname: fname, 
           lname:lname,
           address:address,
@@ -93,6 +123,7 @@ export default function StudentForm(props) {
         }],
         studentDetails,{
         onSuccess: (data)=>{
+          console.log(data);
             setSubmitFlag(false)
             navigate("/");
         },
@@ -101,6 +132,31 @@ export default function StudentForm(props) {
           setFail(true);
         },
           enabled: submitFlag === true,
+          cacheTime: 10000
+        }
+      );
+
+      useQuery(
+        ["landlordDetails", { 
+          email: email,
+          fname: fname, 
+          lname:lname,
+          address:address,
+          date_of_birth: dateOfBirth,
+          phone_number: phoneNumber,
+          documents: files
+        }],
+        landlordDetails,{
+        onSuccess: (data)=>{
+          console.log(data)
+            setSubmitLandlordFlag(false)
+            navigate("/");
+        },
+        onError: (err) =>{
+          console.log(err);
+          setFail(true);
+        },
+          enabled: submitLandlordFlag === true,
           cacheTime: 10000
         }
       );
@@ -114,7 +170,7 @@ export default function StudentForm(props) {
 
       const handleSubmit = e => {
         e.preventDefault();
-        console.log(studentEmail);
+        console.log(email);
         submitForm();
       };
 
@@ -130,18 +186,19 @@ export default function StudentForm(props) {
         };
 
     const submitForm = async () =>{
-        if(studentEmail.length>6 && studentEmail.includes("@") && studentEmail.includes(".")){
-            console.log("Submitting Details In");
-            setSubmitFlag(true);
-        }
+     
+            if(userRole === "Student"){
+              setSubmitFlag(true);
+            }
+            else if(userRole === "Landlord"){
+              setSubmitLandlordFlag(true);
+            }
         else {
             console.log("Unable to Submit");
             setFail(true);
         }
     };
-
-    console.log(files);
-
+    
     const clearFiles = e =>{
       e.preventDefault();
       setFiles({});
@@ -163,16 +220,19 @@ return (
  }} alt="logo"></img>
     </div>
 
-   <form id="form" className={classes.root}>
-   <FormLabel>Student Email</FormLabel>
+   <form id="form"  className={ userRole=== "Student" ? classes.root : classes.landord}>
+   {userRole === "Student" &&  
+   <>
+<FormLabel>First Name</FormLabel>
       <TextField
-        label="Email"
+        label="First Name"
         variant="filled"
-        type="email"
+        type="text"
         required
-        value={studentEmail}
-        onChange={e => setStudentEmail(e.target.value)}
+        value={fname}
+        onChange={e => setFname(e.target.value)}
       />
+
        <FormLabel>Address</FormLabel>
          <TextField style={{height: "170px", maxHeight:"170px"}}
         label="Address"
@@ -184,26 +244,15 @@ return (
         value={address}
         onChange={e => setAddress(e.target.value)}
       />
-       <FormLabel>First Name</FormLabel>
-      <TextField
-        label="First Name"
-        variant="filled"
-        type="text"
-        required
-        value={fname}
-        onChange={e => setFname(e.target.value)}
-      />
-        
-        <FormLabel>Date of Birth</FormLabel>
+<FormLabel>Last Name</FormLabel>
          <TextField
-        label="Date of Birth"
+        label="Last Name"
         variant="filled"
         type="text"
         required
-        value={dateOfBirth}
-        onChange={e => setDateOfBirth(e.target.value)}
-      />
-      
+        value={lname}
+        onChange={e => setLname(e.target.value)}
+      />  
    <FormLabel>College</FormLabel>
          <TextField
         label="College"
@@ -213,16 +262,6 @@ return (
         value={college}
         onChange={e => setCollege(e.target.value)}
       />
-       <FormLabel>Last Name</FormLabel>
-         <TextField
-        label="Last Name"
-        variant="filled"
-        type="text"
-        required
-        value={lname}
-        onChange={e => setLname(e.target.value)}
-      />       
-
        <FormLabel>Phone Number</FormLabel>
          <TextField
         label="Phone Number"
@@ -233,6 +272,16 @@ return (
         onChange={e => setPhoneNumber(e.target.value)}
       />    
 
+<FormLabel>Date of Birth</FormLabel>
+         <TextField
+        label="Date of Birth"
+        variant="filled"
+        type="text"
+        required
+        value={dateOfBirth}
+        onChange={e => setDateOfBirth(e.target.value)}
+      /> 
+
        <FormLabel>Year of Study</FormLabel>
          <TextField
         label="Year of Study"
@@ -242,7 +291,66 @@ return (
         value={yearOfStudy}
         onChange={e => setYearOfStudy(e.target.value)}
       />
-    </form>
+      </>
+}
+{userRole === "Landlord" &&  
+<>
+
+<FormLabel>First Name</FormLabel>
+<TextField
+        label="First Name"
+        variant="filled"
+        type="text"
+        required
+        value={fname}
+        onChange={e => setFname(e.target.value)}
+      />
+ 
+
+       <FormLabel>Address</FormLabel>
+         <TextField style={{height: "155px", maxHeight:"155px"}}
+        label="Address"
+        variant="filled"
+        multiline
+        maxRows={8}
+        type="text"
+        required
+        value={address}
+        onChange={e => setAddress(e.target.value)}
+      />
+
+<FormLabel>Last Name</FormLabel>
+         <TextField
+        label="Last Name"
+        variant="filled"
+        type="text"
+        required
+        value={lname}
+        onChange={e => setLname(e.target.value)}
+      />  
+        
+        <FormLabel>Date of Birth</FormLabel>
+         <TextField
+        label="Date of Birth"
+        variant="filled"
+        type="text"
+        required
+        value={dateOfBirth}
+        onChange={e => setDateOfBirth(e.target.value)}
+      /> 
+     
+       <FormLabel>Phone Number</FormLabel>
+         <TextField
+        label="Phone Number"
+        variant="filled"
+        type="text"
+        required
+        value={phoneNumber}
+        onChange={e => setPhoneNumber(e.target.value)}
+      /> 
+    </>  
+    }
+</form>
     <div style={{
              display: 'flex',
              flexDirection: "row",
@@ -253,9 +361,12 @@ return (
              alignContent: "center",
              gap: "2px",
           }}>
+             {userRole === "Student" &&  
        <FormLabel>Allow Share Location? </FormLabel>
+        }
+          {userRole === "Student" &&  
        <input type="checkbox" onChange = {e => setAllowShowLocation(!allowShowLocation)} style={{margin: "10px 70px 0 0"}}/>
-       
+      }
        <FormLabel>Attach documents</FormLabel>
        <IconButton onClick={handleAttachFiles}>
         <AttachFileIcon />

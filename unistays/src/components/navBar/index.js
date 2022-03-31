@@ -32,7 +32,7 @@ const NavBar = () => {
   var menuOptions = [
     { label: "Home", path: "/" },
     { label: "Profile", path: "/profile" },
-    { label: "Logout", path: "/" },
+    { label: "Logout", path: "/logout" },
     { label: "Login", path: "/login" },
   ];
 
@@ -48,7 +48,7 @@ const NavBar = () => {
 
   const handleMenuSelect = (pageURL) => {
     console.log(pageURL);
-    if(pageURL !== "/"){
+    if(pageURL !== "/logout"){
       navigate(pageURL);
     }
     else{

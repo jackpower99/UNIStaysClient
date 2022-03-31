@@ -18,7 +18,7 @@ const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
   });
 
-export default function Register(props) {
+export default function Register() {
 
     const location = useLocation()
     const { selectedRole } = location.state
@@ -63,7 +63,7 @@ export default function Register(props) {
         onSuccess: (data)=>{
             console.log(data)
             setRegisterFlag(false)
-            navigate("/student-form")
+            navigate("/student-form", { state:{ role: role, email: email } } );
         },
         onError: (err) =>{
             console.log(err);
