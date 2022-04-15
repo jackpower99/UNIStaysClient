@@ -101,28 +101,6 @@ export const getStudentDetails = async (args) => {
     return content;
  }
 
-//  function transformInToFormObject(data) {
-//     let formData = new FormData();
-//     for (let key in data) {
-//       if (Array.isArray(data[key])) {
-//         data[key].forEach((obj, index) => {
-//           let keyList = Object.keys(obj);
-//           keyList.forEach((keyItem) => {
-//             let keyName = [key, "[", index, "]", ".", keyItem].join("");
-//             formData.append(keyName, obj[keyItem]);
-//           });
-//         });
-//       } else if (typeof data[key] === "object") { 
-//         for (let innerKey in data[key]) {
-//           formData.append(`${key}.${innerKey}`, data[key][innerKey]);
-//         }
-//       } else {
-//         formData.append(key, data[key]);
-//       }
-//     }
-//     console.log(formData);
-//   }
-
 export const landlordDetails = async (args) => {
 
     const formData = new FormData();
@@ -158,7 +136,6 @@ export const postAccomodation = async (args) => {
 
     var property_images = args.queryKey[1].property_images;
 
-    var rooms = args.queryKey[1].rooms;
 
     propertyFormData.append("landlord_id", args.queryKey[1].landlordId);
     propertyFormData.append("property_type", args.queryKey[1].property_type);
@@ -168,13 +145,12 @@ export const postAccomodation = async (args) => {
     propertyFormData.append("address", args.queryKey[1].address);
     propertyFormData.append("zip", args.queryKey[1].zip);
     propertyFormData.append("description", args.queryKey[1].description);
-
-    if(args.queryKey[1].posting_type === "Property"){
-        propertyFormData.append("available_start", args.queryKey[1].available_start);
-        propertyFormData.append("available_end", args.queryKey[1].available_end);
-        propertyFormData.append("price_per_month", args.queryKey[1].price_per_month);
-        propertyFormData.append("size_sq_meters", args.queryKey[1].size_sq_meters);
-    }
+    propertyFormData.append("available_start", args.queryKey[1].available_start);
+    propertyFormData.append("available_end", args.queryKey[1].available_end);
+    propertyFormData.append("price_per_month", args.queryKey[1].price_per_month);
+    propertyFormData.append("size_sq_meters", args.queryKey[1].size_sq_meters);
+    propertyFormData.append("lat", args.queryKey[1].lat);
+    propertyFormData.append("lng", args.queryKey[1].lng);
     propertyFormData.append("posting_type", args.queryKey[1].posting_type);
     propertyFormData.append("UNIFlex_available", args.queryKey[1].UNIFlex_available);
     propertyFormData.append("UNIBNB_available", args.queryKey[1].UNIBNB_available);
@@ -185,23 +161,8 @@ export const postAccomodation = async (args) => {
         propertyFormData.append("property_images", file);
     }))
 
-    rooms.forEach((room => {
-        propertyFormData.append("rooms", JSON.stringify(room));
-    }))
-
     for (var value of propertyFormData.keys()) {
         console.log(value);
-     }
-
-    for(var i = 0; i < rooms.length; i++){
-        for(var o = 0; o < rooms[i].room_images.length; o++){
-            var fieldname = 'room_images['+i+']['+o+']';
-            propertyFormData.append(fieldname, rooms[i].room_images[o])
-        }
-    }
-
-    for (var val of propertyFormData.values()) {
-        console.log(val);
      }
 
     const response = await fetch("/api/accomodations",{
@@ -214,3 +175,97 @@ export const postAccomodation = async (args) => {
     const content = await response.json();
     console.log(content);
 }
+
+export const getAccomodations = async () => { 
+
+    const response = await fetch(`/api/accomodations`,{
+        method: "GET",
+        headers: {
+        'Content-Type': 'application/json',
+        "Accepts":"application/json"
+        },
+    });
+
+    const content = await response.json();
+    return content;
+ }
+
+
+ export const getAccomodationById = async (args) => { 
+
+    var id = args.queryKey[1];
+
+    const response = await fetch(`/api/accomodations/${id}`,{
+        method: "GET",
+        headers: {
+        'Content-Type': 'application/json',
+        "Accepts":"application/json"
+        },
+    });
+
+    const content = await response.json();
+    return content;
+ }
+
+ export const bookAccomodation = async (args) => {
+    console.log(args.queryKey[1])
+    const id = args.queryKey[1]._id
+    const postingType = args.queryKey[1].postingType
+
+    const params = {
+        landlord_id: args.queryKey[1].landlordId,
+        student_id: args.queryKey[1].studentId,
+        agreement_type: args.queryKey[1].agreementType,
+        start_date: args.queryKey[1].startDate,
+        end_date: args.queryKey[1].endDate,
+        flexi_days: args.queryKey[1].flexiDays,
+        booked_dates: args.queryKey[1].bookedDates,
+    };
+    const response = await fetch(`/api/accomodations/${id}?action=${postingType}`,{
+        method: "POST",
+        headers: {
+            'Content-Type': 'application/json',
+            "Accepts":"application/json"
+        },
+        body: JSON.stringify(params)
+    });
+    const content = await response.json();
+    return content;
+}
+
+
+export const getLandlordProperties = async (args) => { 
+
+    var id = args.queryKey[1].id;
+
+    console.log(id)
+
+    const response = await fetch(`/api/accomodations/landlord/${id}`,{
+        method: "GET",
+        headers: {
+        'Content-Type': 'application/json',
+        "Accepts":"application/json"
+        },
+    });
+
+    const content = await response.json();
+    return content;
+ }
+
+ export const deleteAccomodation = async (args) => { 
+
+    var id = args.queryKey[1].id;
+
+    console.log(args.queryKey[1])
+
+    const response = await fetch(`/api/accomodations/${id}?action=delete`,{
+        method: "POST",
+        headers: {
+        'Content-Type': 'application/json',
+        "Accepts":"application/json"
+        },
+    });
+
+    const content = await response.json();
+    return content;
+ }

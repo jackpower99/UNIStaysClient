@@ -63,7 +63,7 @@ const NavBar = () => {
 
   return (
     <>
-      <AppBar position="fixed" style={{ background: "#FE7E6D" }}>
+      <AppBar position="fixed" style={{ background: "#FE7E6D", margin: 0 }}>
         <Toolbar>
           <Typography variant="h4" className={classes.title}>
             UNIStays

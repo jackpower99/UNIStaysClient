@@ -1,11 +1,14 @@
 import React from "react";
+import HomePageTemplatePage from "../components/homePageTemplatePage";
+
+import { useLocation } from "react-router-dom";
 
 
 const HomePage = () => {
 
     return (
         <>
-        <h1>Welcome To UNIStays</h1>
+            <HomePageTemplatePage />
         </>
     )
 }

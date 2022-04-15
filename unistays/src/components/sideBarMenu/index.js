@@ -29,7 +29,7 @@ const getIcon = (text) => {
             return <HouseIcon />;
         case 'Advertise': 
             return <LoyaltyIcon />;
-        case 'My Details': 
+        case 'Social': 
             return <SupervisorAccountIcon />;
         default:
             return <HouseIcon />;

@@ -5,7 +5,7 @@ import LandlordPageTemplate from '../components/landlordPageTemplate';
 const ProfilePage = () => {
 
     const navigate = useNavigate()
-    const { role }  = JSON.parse(localStorage.getItem("user"));
+    const role   = localStorage.getItem("userRole")
 
 // const handleLogout = () => {
 //     localStorage.clear();

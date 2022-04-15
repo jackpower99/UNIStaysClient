@@ -69,7 +69,7 @@ export default function PostVacancy() {
             backgroundColor: theme.palette.common.white,
             width: "40vw",
             gap: 10,
-            margin: 10,
+            margin: 0,
             height:"45vh",
             paddingTop: "10vh",
 
@@ -91,7 +91,6 @@ export default function PostVacancy() {
           justifyContent: 'flex-start',
           alignItems: 'center',
           backgroundColor: theme.palette.common.white,
-         // height:"70vh",
           gap: 13,
 
           '& .MuiFormControl-root':{
@@ -103,7 +102,6 @@ export default function PostVacancy() {
           margin: 2,
           width: "65vw",
           gap: 1,
-         // marginBottom: 10
         }
       }
       }));
@@ -132,13 +130,19 @@ export default function PostVacancy() {
 
       const [uniFlexAvailable, setUniFlexAvailable] = React.useState(false)
       const [uniBNBAvailable, setUniBNBAvailable] = React.useState(false)
+      const [postWholeSemester, setPostWholeSemester] = React.useState(false)
 
       const [date, setDate] = React.useState([null, null])
       const [pricePerMonth, setPricePerMonth] = React.useState(0)
       const [sizeSquareMeters, setSizeSquareMeters] = React.useState(0)
       const [roomsArray, setRoomsArray] = React.useState([]);
 
-      const landlordID = JSON.parse(localStorage.getItem("user"))._id;
+      const [lat, setLat] = React.useState(0);
+      const [lng, setLng] = React.useState(0);
+
+      const landlordID = localStorage.getItem("landlordId");
+
+      console.log(landlordID)
 
       useQuery(
         ["postAccomodation", { 
@@ -147,6 +151,8 @@ export default function PostVacancy() {
           posting_type: postTypeForVacancyPriceSection,
           county :county,
           zip: zip,
+          lat: lat,
+          lng: lng,
           size_sq_meters: sizeSquareMeters,
           colleges: collegeNames,
           description: propertyDescription,
@@ -160,7 +166,7 @@ export default function PostVacancy() {
           property_images: propertyImages,
           amenities: ammenityNames,
           price_per_month: pricePerMonth,
-          rooms: roomsArray
+          rooms: roomsArray,
         }],
         postAccomodation,{
         onSuccess: (data)=>{
@@ -270,7 +276,7 @@ export default function PostVacancy() {
           //Todo: Validation
         if(!disableFormControlsForEdit){
           setDisableFormControlsForEdit(true);
-          setOpen(true);
+          setVacancyPriceSectionVisibleFlag(true);
         }
         else{
        setDisableFormControlsForEdit(!disableFormControlsForEdit)
@@ -282,46 +288,39 @@ export default function PostVacancy() {
         setOpen(false);
       };
 
-
       //TODO validation !!!
-      const handleSubmit = () => {
-        setSubmitFlag(true);
-      }
-
-      const postAsProperty = (e) => {
-        e.preventDefault()
-        setPostTypeForVacancyPriceSection("Property");
-        setVacancyPriceSectionVisibleFlag(true)
-        handleClose()
-      }
-
-      const postAsRooms = (e) => {
-        e.preventDefault()
-        setPostTypeForVacancyPriceSection("Rooms");
-        setVacancyPriceSectionVisibleFlag(true)
-        handleClose()
-      }
-
-      const getPriceSectionValues = (values) =>{
-        console.log(postTypeForVacancyPriceSection)
-        if(postTypeForVacancyPriceSection==="Rooms"){
-          setRoomsArray(values)
+      const handleSubmit =  async () => {
+        if(zip && address && date){
+          setSubmitFlag(true);
         }
-        else{
+      }
+
+      const getPriceSectionValues = async (values) =>{
+        console.log(values)
+          const res = await getLatLng();
+          setLat(res.results[0].geometry.location.lat)
+          setLng(res.results[0].geometry.location.lng)
           setDate(values.date)
           setPricePerMonth(values.pricePerMonth)
           setSizeSquareMeters(values.sizeSquareMeters)
           setUniBNBAvailable(values.UNIBNBChecked)
           setUniFlexAvailable(values.UNIFlexChecked)
-        }
-        handleSubmit()
+          handleSubmit()
       }
 
-      console.log(postTypeForVacancyPriceSection);
-      
+      const getLatLng = async() => {
+        const response = await fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${zip}&key=AIzaSyBr79tHPtjDXaDwrmDnyAZzgjGfCJV273w`,{
+          method: "GET",
+      });
+      const content = await response.json();
+      console.log(content)
+      return content;
+      }
+
+      console.log(lat)
+      console.log(lng)
   return (
     <>
-      <Container>
 
           <Box className={ isMobile ? classes.mobile : classes.box}>
 
@@ -502,7 +501,7 @@ export default function PostVacancy() {
         </Select>
       </FormControl> 
       </Box>  
-    </Container> 
+ 
 
 <Container sx ={{
   display: "flex",
@@ -543,29 +542,8 @@ export default function PostVacancy() {
 </Container>
 
 { vacancyPriceSectionVisibleFlag && 
-        <VacancyPriceSection rooms={numberOfBeds} type={postTypeForVacancyPriceSection} callbackGetPriceSectionDetails={getPriceSectionValues} />
+        <VacancyPriceSection callbackGetPriceSectionDetails={getPriceSectionValues} />
 }
-
-      <Dialog
-        open={open}
-        TransitionComponent={Transition}
-        keepMounted
-        onClose={handleClose}
-        aria-describedby="alert-dialog-slide-description"
-      >
-        <DialogTitle>{"How would you like to advertise your property?"}</DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-slide-description">
-         We've got your properties details. Nice Place! Would you like to advertise the whole property or the individual rooms?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={postAsProperty}>Property</Button>
-          <Button onClick={postAsRooms}>Individual Rooms</Button>
-        </DialogActions>
-      </Dialog>
-
-        </>
-  
-  )
+</>
+)
 }

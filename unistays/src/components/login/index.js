@@ -63,10 +63,9 @@ export default function Login(props) {
               console.log(data.token)
               const token = data.token;
               const user = data.user;
-              localStorage.setItem("user", JSON.stringify(user));
+              localStorage.setItem("userEmail", JSON.stringify(user.email));
+              localStorage.setItem("userRole", JSON.stringify(user.role));
               localStorage.setItem("token", token);
-
-              console.log(localStorage.getItem("user"))
               navigate("/", { replace: true})
             }
         },

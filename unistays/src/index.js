@@ -11,6 +11,7 @@ import HomePage from './pages/homePage';
 import NavBar from './components/navBar';
 import RequireAuth from "./components/requireAuth";
 import StudentFormPage from './pages/studentFormPage';
+import PaymentPage from './pages/paymentPage';
 
 
 const queryClient = new QueryClient({
@@ -37,6 +38,7 @@ const App = () => {
       <Route exact path = "/register" element = {<RegisterPage/>}></Route>
       <Route exact path = "/select-role" element = {<UserRolePage/>}></Route>
       <Route exact path = "/student-form" element = {<StudentFormPage />}></Route>
+      <Route exact path = "/payment-page" element = {<PaymentPage />}></Route>
       <Route exact path = "/" element = {<HomePage/>}></Route>
 
       <Route element={<RequireAuth />}>
