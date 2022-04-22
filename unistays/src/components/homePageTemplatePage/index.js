@@ -13,6 +13,7 @@ import Logo from '../../resource/images/logoForHome.png'
 import { alpha } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AgreementCardsDisplay from '../agreementCardsDisplay';
+import FilterCard from '../filterCard';
 
 export default function HomePageTemplatePage() {
     const mapContainerStyle = {
@@ -23,6 +24,8 @@ export default function HomePageTemplatePage() {
 
       const [accomodations, setAccomodations] = React.useState([])
       const [accomodationClicked, setAccomodationClicked] = React.useState({});
+      const [showFilterCard, setShowFilterCard] = React.useState(false)
+      const [filterCardOpen, setFilterCardOpen] = React.useState(false)
 
       const handleStudentSignUpButtonClicked = (e)=>{
         e.preventDefault()
@@ -35,9 +38,17 @@ export default function HomePageTemplatePage() {
       } 
 
       const clickedAccomodationCallbackFunction = (accomodation)=>{
-        console.log(accomodation)
         setAccomodationClicked(accomodation);
       }
+
+      const filterAccomodationsCallBack = (accs) =>{
+        setAccomodations(accs)
+      }
+
+      React.useEffect(() => {
+        setAccomodationClicked(accomodations[0])
+      }, [accomodations])
+      
 
       const useStyles = makeStyles(theme => ({
         root: {
@@ -102,14 +113,14 @@ export default function HomePageTemplatePage() {
         onError: (err) =>{
           console.log(err);
         },
-          cacheTime: 10000
+        refetchOnMount: "always",
         }
       );
 
-      console.log(accomodationClicked)
+      console.log(accomodations)
 
   return (
-    <>
+    <div style={{display: "flex", flexDirection: "column",alignItems: "center"}}>
     <Paper elevation={0}>
     <Paper elevation={1} className={classes.paperContainer}>
       <div className = {classes.root}>
@@ -138,23 +149,45 @@ export default function HomePageTemplatePage() {
 
     
     </Paper>
+
+    <Button
+     onClick={(()=>{ 
+       if(filterCardOpen === false) {setShowFilterCard(true); setFilterCardOpen(true);}
+       else{
+         setFilterCardOpen(false)
+         setShowFilterCard(false)
+        }
+      })
+      } 
+     sx={{ height: '7vh', width: '10vw', backgroundColor: "#FE7E6D", color: 'white', fontSize: 15, marginTop: 2, marginBottom:1, ":hover": {backgroundColor: "#FE7E6D"}}} 
+     type="submit" 
+     variant="contained"
+     >
+       { filterCardOpen ? "Close Filter Card" : "Filter Accomodations"  }
+    </Button>
+
+
+{ showFilterCard &&
+    <FilterCard accomodations={accomodations} filterAccomodationsCallBack={filterAccomodationsCallBack}/>
+}
+
     
-    <Grid sx={{marginTop:10}} container spacing={3}>
+    <Grid container spacing={3}>
     <Grid item xs={6}>
   <Map mapStyle={mapContainerStyle} accomodations={accomodations} clickedAccomodationCallbackFunction={clickedAccomodationCallbackFunction}/>
   </Grid>
   <Grid item xs={6}>
 
 {
- accomodationClicked !== null && accomodationClicked !== undefined && Object.getOwnPropertyNames(accomodationClicked).length !== 0 &&
-  <AccomodationDetailsTemplate accomodationClicked={accomodationClicked}/>
+ accomodationClicked !== null && accomodationClicked !== undefined && Object.getOwnPropertyNames(accomodationClicked).length !== 0 && 
+ <AccomodationDetailsTemplate accomodationClicked={accomodationClicked}/>
 }
 
-{  (accomodationClicked === null || accomodationClicked === undefined || Object.getOwnPropertyNames(accomodationClicked).length === 0) &&
-<WelcomePageCard />
-}
+ {/* (accomodationClicked === null || accomodationClicked === undefined || Object.getOwnPropertyNames(accomodationClicked).length === 0) &&
+<WelcomePageCard />  */}
+
   </Grid>
   </Grid>
-  </>
+  </div>
   )
 }

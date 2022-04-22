@@ -29,7 +29,7 @@ return (
     <>
 
     <Box className={classes.root} >
-      <Card sx={{
+      <Card elevation={20} sx={{
           width: "55%",
           height: "250px",
           textAlign: "center",
@@ -38,14 +38,16 @@ return (
           justifyContent: 'center',
           alignItems: 'center',
           mt: "100px",
-          bgcolor: "#F0F0F0",
+          backgroundColor: "#FE7E6D",
+          borderRadius: "10px"
+         // bgcolor: "#F0F0F0",
           }}>
    
       <CardContent>
-          <Link to = "/register" state={{selectedRole: props.role}}>
+          <Link style={{ textDecoration: 'none' }} to = "/register" state={{selectedRole: props.role}}>
         <Typography sx={{
         fontSize: "4.5vmin",
-       color: "#FE7E6D",
+       color: "white",
        letterSpacing: 2,
        fontWeight: 'light',
        fontStyle: 'oblique',

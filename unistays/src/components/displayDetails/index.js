@@ -7,47 +7,74 @@ import { Buffer } from 'buffer';
 import {DropzoneDialog} from 'material-ui-dropzone'
 import { AttachFile, Delet } from '@mui/icons-material';
 import { makeStyles } from '@material-ui/core';
-
+import FriendListContainer from '../friendListContainer';
 import temp from '../../resource/images/landingJPG.jpg'
-
+import { uploadStudentProfilePicture } from '../../api/api';
+import prop from '../../resource/images/Portrait_Placeholder.png'
 
 export default function DisplayDetails( { role, user } ) {
 
   const [attachFilesFlag, setAttachFilesFlag] = React.useState(false);
+  const [uploadStudentProfilePictureFlag, setUploadStudentProfilePictureFlag] = React.useState(false);
   const [userImage, setUserImages] = React.useState([]);
   const [objURL, setObjURL] = React.useState("")
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
+
+
 
   const handleAttachFiles = e => {
     e.preventDefault();
     setAttachFilesFlag(true);
   }
+  console.log(role)
+
+  useQuery(
+    ["uploadProfilePictureStudent", { 
+      student_email: user.student_email,
+      documents: userImage
+    }],
+    uploadStudentProfilePicture,{
+    onSuccess: (data)=>{
+      console.log(data);
+      setUploadStudentProfilePictureFlag(false)
+    },
+    onError: (err) =>{
+      console.log(err);
+      setUploadStudentProfilePictureFlag(false)
+    },
+      enabled: uploadStudentProfilePictureFlag === true,
+      cacheTime: 10000
+    }
+  );
+
 
   const clearFiles = e =>{
     e.preventDefault();
-    setUserImages({});
+    setUserImages([]);
   }
+
+  console.log(Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10))
 
   const handleSave = (f) => {
     //Saving files to state for further use and closing Modal
     setUserImages(f);
     setObjURL(URL.createObjectURL(f[0]))
     setAttachFilesFlag(false);
+    setUploadStudentProfilePictureFlag(true)
     };
 
   const useStyles = makeStyles(theme => ({
     root: {
       display: 'flex',
       flexDirection: 'column',
-      justifyContent: 'flex-start',
+      justifyContent: 'center',
       alignItems: 'center',
-      marginTop: "10vh",
+      marginTop: "2vh",
       gap: 10,
-      // marginLeft: "12vw",
-      backgroundColor: theme.palette.common.black,
-      height: "100vh",
-      width: "45vw",
+      minHeight: "85vh",
+      width: "50vw",
+      },
+      typography:{
+        fontSize: "15px"
       }
   }));
 
@@ -55,23 +82,23 @@ export default function DisplayDetails( { role, user } ) {
 
   return (
 
-    <Paper className={classes.root}>
+ <div style={{display: "flex", flexDirection:"row", justifyContent: "center", alignItems:"center", flexWrap:"nowrap", gap:40, marginTop:20 }}> 
+
+    <Paper elevation={20} sx={{ backgroundColor: "#f2c8c2", borderRadius: "10px"}}className={classes.root}>
       <Box
                 component="img"
                 sx={{
                   height: "25vh",
                   width: '20vw',
-                  marginTop: 3,
-                  alignSelf: 'flex-start',
+                  marginTop: 1,
+                  alignSelf: 'center',
                   marginLeft: "20px",
-                  border: '1px solid black',
-                //   marginRight: "auto",
-                  //maxWidth: "40vw",
+                  border: '5px solid white',
+                  borderRadius: "10px",
                   overflow: 'none',
-                  // width: '100%',
                 }}
-                src={ user.profile_image  ? `data:${user.profile_image?.type};base64,${Buffer.from(user.profile_image?.data).toString('base64')}` : userImage[0] ? objURL: temp}
-                alt={user.profile_image?.name}
+                src={ user.profile_picture  ? `data:${user.profile_picture?.type};base64,${Buffer.from(user.profile_picture?.data).toString('base64')}` : userImage[0] ? objURL: prop}
+                alt={user.profile_picture?.name}
                 onClick={handleAttachFiles}
               />
           
@@ -85,35 +112,50 @@ export default function DisplayDetails( { role, user } ) {
         maxFileSize={5000000}
         />
 
-        <Grid container spacing={2}>
-          <Grid item xs={12}>
-            <Typography variant='h4'>Name: {user.fname} {user.lname}</Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant='h4'>Address: {user.address}</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant='h4'>Date of Birth: {user.date_of_birth}</Typography>
-          </Grid>
-          <Grid item xs={6}>
-            <Typography variant='h4'>Age: { Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10) }</Typography>
-          </Grid>
+<Typography sx={{alignSelf:"flex-start", marginLeft:4, marginTop:3, fontFamily:'"Segoe UI"', color:"white"}} variant='h4'>{user.fname} {user.lname}'s Profile</Typography>
+
+          <Paper sx={{display: "flex", flexDirection: "column", flexWrap:"wrap", alignItems:"flex-start",minWidth:"35vw",gap:2, marginTop: 3, marginLeft: 3, height:"30vh", padding: 5 }}>
+   
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>College: {user.college}</Typography>
+        
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Year of Study: {user.year_of_study}</Typography>
+         
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Date of Birth: {user.date_of_birth}</Typography>
+ 
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Age: { Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10) }</Typography>
+
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}}  variant='h6'>Address: {user.address}</Typography>
+
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Phone: {user.phone_number}</Typography>
+   
       <Divider></Divider>
-      <Grid item xs={12}>
-      <Typography variant='h4'>Documents</Typography>
-      </Grid>
-        <Grid item xs={12}>
-        <div style={{display: "flex", flexDirection: "row", flexWrap: 'wrap'}}>
+ 
+      </Paper>
+    
+
+      <Paper sx={{display: "flex", flexDirection: "column", flexWrap:"wrap", justifyContent:"center", alignItems:"center",width:"35vw",gap:2, marginTop: 3, marginLeft: 3, maxHeight:"50vh", padding: 3 }}>
+
+      <Typography variant='h5'>Documents</Typography>
+   
+      { user.documents?.length > 0 &&
+
+        <div style={{display: "flex", flexDirection: "row", flexWrap:"wrap",  alignItems:"center",width:"35vw",gap:4, marginTop: 3, maxHeight:"50vh", padding: 5 }}>
         { user?.documents?.map((doc, key) => (
-          <iFrame style={{height: "30vh", marginRight: 10}} key={key} src={`data:${doc.type};base64,${Buffer.from(doc.data).toString('base64')}`} />
+          <iFrame style={{height: "20vh"}} key={key} src={`data:${doc?.type};base64,${Buffer.from(doc?.data).toString('base64')}`} />
         ))
       }
+      
         </div>
-        </Grid>
-      </Grid>
-            </Paper>
+}
+</Paper>
+</Paper>
+     
+            { role ==="Student" && 
+            <FriendListContainer />
+
+}
+</div>
+
+
   )
 }
-// //       keys.map((key, index) =>(
-// // <div key={index} style={{marginLeft: "10vw"}}>{(key +  values[index])}</div>
-//       ))

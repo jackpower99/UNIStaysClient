@@ -13,13 +13,18 @@ import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import SwipeableViews from 'react-swipeable-views';
 import { autoPlay } from 'react-swipeable-views-utils';
 import { useTheme } from '@mui/material/styles';
-
+import { Fab, Drawer } from '@mui/material';
+import NavigationIcon from "@material-ui/icons/Navigation";
+import AccomodationReviews from '../accomodationReviews';
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 export default function AccomodationPropertyDetails(props) {
 
-  const role = JSON.parse(localStorage.getItem("user"))?.role;
+
+  const role = JSON.parse(localStorage.getItem("userRole"));
+
+  console.log(role)
 
     const useStyles = makeStyles((theme) => ({
         root: {
@@ -49,8 +54,9 @@ export default function AccomodationPropertyDetails(props) {
     const { accomodationClicked, accomodationTypeClicked } = props;
     const [activeStep, setActiveStep] = React.useState(0);
     const [maxSteps, setMaxSteps] = React.useState(0);
+    const [drawerOpen, setDrawerOpen] = React.useState(false);
 
-
+    console.log(accomodationClicked.available_start)
 
     React.useEffect(() => {
         setMaxSteps(accomodationClicked.property_images.length)
@@ -75,7 +81,6 @@ export default function AccomodationPropertyDetails(props) {
 
     const classes = useStyles();
 
-if(accomodationClicked !== undefined){
   return (
     <>
 <Box sx={{ maxWidth: "32vw", flexGrow: 1 }}>
@@ -271,6 +276,20 @@ if(accomodationClicked !== undefined){
     </Paper>
 
       </div>
+      <Fab
+       // color="secondary"
+        sx={{backgroundColor: "#FE7E6D", color: "white"}}
+        variant="extended"
+        onClick={() =>setDrawerOpen(true)}
+       // className={classes.fab}
+      >
+        <NavigationIcon />
+        Reviews
+      </Fab>
+      <Drawer anchor="top" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
+        <AccomodationReviews acc ={accomodationClicked}/>
+        {/* <MovieReviews movie={movie} /> */}
+      </Drawer>
     </>
 
 
@@ -295,7 +314,6 @@ if(accomodationClicked !== undefined){
        </Container>
     </>
   )
-}
 // else{
 //     return(
 //         <div>

@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import SideBarMenu from '../sideBarMenu'
 import DisplayDetails from "../displayDetails";
 import { useQuery } from 'react-query';
 import { getLandlordDetails } from '../../api/api';
-import { Container, makeStyles, Grid } from '@material-ui/core';
-import { Box } from '@mui/material';
+import { Grid } from '@material-ui/core';
 import PostVacancy from '../postVacancy';
 import { getLandlordProperties } from '../../api/api';
 import DisplayProperties from '../displayProperties';
-import {deleteAccomodation} from '../../api/api.js'
+import {deleteAccomodation, getStudentDetails, getStudentBookings} from '../../api/api.js'
 
 export default function LandlordPageTemplate() {
 
@@ -16,7 +15,7 @@ export default function LandlordPageTemplate() {
  const [role, setRole ] = useState(JSON.parse(localStorage.getItem("userRole")))
 
  const [ landlord, setLandlord ] = useState({});
- const [ menuItem, setMenuItem ] = useState("My Details");
+ const [ menuItem, setMenuItem ] = useState("Social");
 
  const [ landlordsProperties, setLandlordProperties ] = useState([]);
 
@@ -25,11 +24,17 @@ export default function LandlordPageTemplate() {
  const [accomodationDeleted, setAccomodationDeleted] = React.useState({});
  const [runQueryFlag, setRunQueryFlag] = React.useState(false);
 
+ const [studentId, setStudentId] = useState("");
+
+ const [student, setStudent] = useState({})
+
  const [menuChangeRnQueryFlag, setMenuChangeRunQueryFlag] = React.useState(false);
 
+ const [ studentBookings, setStudentBookings ] = useState([]);
+
  const landlordRestructured = (existingLandlord) => {
-  setLandlord((({ email, fname, lname, address, date_of_birth, phone_number, documents, properties}) => 
- ({ email, fname, lname, address, date_of_birth, phone_number, documents, properties}))(existingLandlord));
+  setLandlord((({ email, fname, lname, address, date_of_birth, phone_number, documents, properties, profile_picture}) => 
+ ({ email, fname, lname, address, date_of_birth, phone_number, documents, properties, profile_picture}))(existingLandlord));
  }
 
  const handleMenuItemSelected = (selected) => { 
@@ -49,10 +54,29 @@ export default function LandlordPageTemplate() {
       console.log(err);
   },
   cacheTime: 500,
+  enabled: role === "Landlord"
   }
 );
 
-console.log(landlordId)
+useQuery(
+  ["getStudentDetails", { email: emailLS }],
+  getStudentDetails,{
+  onSuccess: (data)=>{
+    console.log(data)
+    setStudentId(data.existingStudent._id)
+    setStudent(data.existingStudent)
+    localStorage.setItem("studentId", data.existingStudent._id)
+  },
+  onError: (err) =>{
+      console.log(err);
+  },
+  refetchOnMount: "always",
+
+  }
+);
+
+console.log(emailLS)
+
 
 useQuery(
   ["getLandlordProperties", { id: landlordId }],
@@ -91,25 +115,41 @@ onError: (err) =>{
 }
 );
 
+useQuery(
+  ["getStudentBookings", { id: localStorage.getItem("studentId")}],
+  getStudentBookings,{
+  onSuccess: (data)=>{
+    setStudentBookings(data)
+  },
+  onError: (err) =>{
+      console.log(err);
+  },
+  refetchOnMount: "always",
+  }
+);
 
   return (
       <>
       <Grid container>
-        <Grid item xs ={3}>
-      <SideBarMenu menuItemSelected={handleMenuItemSelected} menuItems={['My Properties', 'Advertise', 'Social']}/>
+        <Grid item xs ={2}>
+      <SideBarMenu menuItemSelected={handleMenuItemSelected} menuItems={[{"Landlord":['My Properties', 'Advertise', 'Social']}, {"Student":["My Bookings","Social"] } ] }/>
       </Grid>
-      <Grid item xs ={9} sx={{ display: "flex", justifyContent: "center" }}>
+    
+      <Grid item xs ={10}>
+      <div style={{display: "flex", flexDirection:"row", justifyContent: "flex-start", alignItems:"center", flexWrap:"nowrap" }}>
 
       {menuItem === "Social" && 
-         <DisplayDetails role={ role } user={ landlord } />
+         <DisplayDetails role={role} user={ role ==="Landlord" ? landlord : student } />
       }
       {menuItem === "Advertise" &&
         <PostVacancy />
       }
-         {menuItem === "My Properties" &&
-           <DisplayProperties accomodations={landlordsProperties} action={action} />
+         {(menuItem === "My Properties" || menuItem === "My Bookings")  &&
+           <DisplayProperties accomodations={ role ==="Landlord" ? landlordsProperties : studentBookings} action={action} />
          }
+              </div>
          </Grid>
+    
          
          </Grid>
     </>

@@ -23,6 +23,9 @@ import VacancyPriceSection from '../vacancyPriceSection';
 import {useQuery} from "react-query";
 import { typography } from '@mui/system';
 import { postAccomodation } from '../../api/api';
+import { useNavigate } from 'react-router-dom';
+
+import moment from 'moment';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -59,6 +62,8 @@ export default function PostVacancy() {
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const [open, setOpen] = React.useState(false);
 
+    const navigate = useNavigate()
+
     const useStyles = makeStyles(theme => ({
         box: {
             display: 'flex',
@@ -66,10 +71,10 @@ export default function PostVacancy() {
             flexDirection: 'column',
             justifyContent: 'flex-start',
             alignItems: 'left',
+            alignSelf:"flex-start",
             backgroundColor: theme.palette.common.white,
             width: "40vw",
             gap: 10,
-            margin: 0,
             height:"45vh",
             paddingTop: "10vh",
 
@@ -159,8 +164,8 @@ export default function PostVacancy() {
           bedroom_count: numberOfBeds,
           bathroom_count: numberOfBaths,
           property_type: type,
-          available_start: date[0],
-          available_end: date[1],
+          available_start: moment(date[0]).zone('+01:00'),
+          available_end:moment(date[1]).zone('+01:00'),
           UNIFlex_available: uniFlexAvailable,
           UNIBNB_available: uniBNBAvailable,
           property_images: propertyImages,
@@ -171,6 +176,7 @@ export default function PostVacancy() {
         postAccomodation,{
         onSuccess: (data)=>{
           console.log(data);
+          navigate("/", { replace: true})
           setSubmitFlag(false)
         },
         onError: (err) =>{
@@ -320,7 +326,7 @@ export default function PostVacancy() {
       console.log(lat)
       console.log(lng)
   return (
-    <>
+    <div style={{display: "flex", flexDirection:"column"}}>
 
           <Box className={ isMobile ? classes.mobile : classes.box}>
 
@@ -544,6 +550,6 @@ export default function PostVacancy() {
 { vacancyPriceSectionVisibleFlag && 
         <VacancyPriceSection callbackGetPriceSectionDetails={getPriceSectionValues} />
 }
-</>
+</div>
 )
 }

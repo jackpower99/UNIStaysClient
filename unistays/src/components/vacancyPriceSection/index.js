@@ -14,7 +14,6 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 
 
-
 export default function VacancyPriceSection(props) {
 
 const {callbackGetPriceSectionDetails} = props;
@@ -87,7 +86,7 @@ const handleVancancyPriceSectionSubmitButtonClicked = e =>{
           startText="Availability Start"
           value={date}
           onChange={(newValue) => {
-            setDate(newValue);
+            setDate( newValue);
           }}
           renderInput={(startProps, endProps) => (
             <React.Fragment>

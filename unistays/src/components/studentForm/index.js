@@ -80,6 +80,8 @@ export default function StudentForm() {
   const role   = location.state.role;
   const email = location.state.email;
 
+  console.log(email)
+
     const [fname, setFname] = React.useState("");
     const [lname, setLname] = React.useState("");
     const [address, setAddress] = React.useState("");
@@ -90,7 +92,6 @@ export default function StudentForm() {
     const [allowShowLocation, setAllowShowLocation] = React.useState(false);
     const [files, setFiles] = React.useState([]);
     const [userRole, setUserRole] = React.useState(role);
-    const [userEmail, setUserEmail] = React.useState(email);
  
     const [submitFlag, setSubmitFlag] = React.useState(false);
     const [submitLandlordFlag, setSubmitLandlordFlag] = React.useState(false);
@@ -110,7 +111,7 @@ export default function StudentForm() {
 
       useQuery(
         ["studentDetails", { 
-          email: userEmail,
+          student_email: email,
           fname: fname, 
           lname:lname,
           address:address,
@@ -191,6 +192,7 @@ export default function StudentForm() {
               setSubmitFlag(true);
             }
             else if(userRole === "Landlord"){
+              if(email !== "" && fname !== "" && lname !== "" && address !== "" && dateOfBirth !== "" && phoneNumber !== "" )
               setSubmitLandlordFlag(true);
             }
         else {

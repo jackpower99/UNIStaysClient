@@ -42,13 +42,15 @@ const useOptions = () => {
 
 const SplitForm = (props) => {
 
-  const { nights, price } = props;
+  const {cb, nights, price } = props;
 
   const stripe = useStripe();
   const elements = useElements();
   const options = useOptions();
 
   const [success, setSuccess] = React.useState(false)
+
+  const token = localStorage.getItem("token")
 
   const navigate = useNavigate();
 
@@ -78,6 +80,7 @@ const SplitForm = (props) => {
             const response = await fetch("/api/payment",{
                 method: "POST",
                 headers: {
+                  'Authorization': token,
                     'Content-Type': 'application/json',
                     "Accepts":"application/json"
                 },
@@ -88,8 +91,7 @@ const SplitForm = (props) => {
 
             if(content.success){
                 setSuccess(true);
-                navigate('/', {replace: true})
-                localStorage.setItem('paymentSuccess', true)
+                cb(true)
             }
       }
         catch (error){
@@ -108,9 +110,9 @@ const SplitForm = (props) => {
         justifyContent: "center",
         alignContent: "center",
         alignItems: "center",
-        marginTop: "15vh",
-        width:"50vw", 
-        height: "60vh",
+        // marginTop: "15vh",
+        width:"25vw", 
+        height: "40vh",
         backgroundColor: "#FE7E6D",
         borderRadius: 10,
 

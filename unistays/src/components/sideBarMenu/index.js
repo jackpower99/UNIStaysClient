@@ -18,14 +18,17 @@ import { useTheme } from "@material-ui/core/styles";
 export default function SideBarMenu(props) {
 
 const { menuItems } = props;
+console.log(menuItems)
+const landlordMenu = menuItems[0].Landlord; 
+const studentMenu = menuItems[1].Student; 
 const { menuItemSelected } = props;
-
+const [role, setRole ] = React.useState(JSON.parse(localStorage.getItem("userRole")))
 const [ drawerWidth, setDrawerWidth ] = React.useState("15vw");
 
 const getIcon = (text) => { 
     console.log(text);
     switch(text){
-        case 'My Properties':
+        case 'My Properties' || 'My Bookings':
             return <HouseIcon />;
         case 'Advertise': 
             return <LoyaltyIcon />;
@@ -79,7 +82,19 @@ const getIcon = (text) => {
       >
         <Box>
           <List>
-            {menuItems.map((text, index) => (
+            {role === "Landlord" ? landlordMenu.map((text, index) => (
+              <ListItem button key={index}
+                onClick={ () => menuItemSelected(text)}
+              >
+                <ListItemIcon>
+                  {
+                      getIcon(text)
+                  }
+                </ListItemIcon>
+                <ListItemText primary={text} />
+              </ListItem>
+            )) : 
+            studentMenu.map((text, index) => (
               <ListItem button key={index}
                 onClick={ () => menuItemSelected(text)}
               >

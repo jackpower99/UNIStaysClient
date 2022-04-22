@@ -9,6 +9,8 @@ function AccomodationDetailsTemplate(props) {
 
     const [accTypeClicked, setAccTypeClicked] = React.useState("")
 
+    const [disabled, setDisabled] = React.useState(true)
+
     const useStyles = makeStyles(theme => ({
         root: {
             height: "80vh",
@@ -25,6 +27,7 @@ React.useEffect(() => {
 
 const accomodationTypeClicked = (type) =>{
   setAccTypeClicked(type)
+  setDisabled(false)
 }
 
   return (
@@ -34,15 +37,14 @@ const accomodationTypeClicked = (type) =>{
           <AccomodationPropertyDetails accomodationClicked ={accomodationClicked} accomodationTypeClicked={accomodationTypeClicked}></AccomodationPropertyDetails>
           </Grid>
           <Grid item xs={5}>
-            { accTypeClicked !== "" &&
             <ReservationCard postingType={accTypeClicked} price={accomodationClicked.price_per_month}
              startDate={accomodationClicked.available_start}
              endDate={accomodationClicked.available_end}
              landlordID={accomodationClicked.landlord_id}
              accomodationID={accomodationClicked._id}
              alreadyBookedDates={accomodationClicked.booked_dates}
+             disabled={disabled}
             />
-            }
             </Grid>
           </Grid>
 

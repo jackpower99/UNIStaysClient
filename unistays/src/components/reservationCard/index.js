@@ -15,17 +15,18 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import Slide from '@mui/material/Slide';
 import { useNavigate } from 'react-router-dom';
-
+import ProcessPaymentStripe from '../processPaymentStripe';
 import ToggleDays from '../toggleDays';
+import moment from 'moment'
 
 import { Container, FormControl, Box, TextField, IconButton, Typography, Paper, Button } from '@mui/material';
 
 import { bookAccomodation } from '../../api/api';
-import { set } from 'date-fns';
+import { getTime, set } from 'date-fns';
 
 export default function ReservationCard(props) {
 
-    const { postingType, price, startDate, endDate, landlordID, accomodationID, alreadyBookedDates } = props;
+    const { postingType, price, startDate, endDate, landlordID, accomodationID, alreadyBookedDates, disabled } = props;
 
     const Transition = React.forwardRef(function Transition(props, ref) {
         return <Slide direction="up" ref={ref} {...props} />;
@@ -38,21 +39,33 @@ startDateMinus1Day.setTime(startDateMinus1Day.getTime() - dateOffset);
 var endDateMinus1Day= new Date(endDate);
 endDateMinus1Day.setTime(endDateMinus1Day.getTime() - dateOffset);
 
+console.log(moment(startDate).zone('+01:00'))
+
 const navigate = useNavigate();
 
 
     const [date, setNewDate] = React.useState([startDateMinus1Day, endDateMinus1Day])
     const [UNIFlexDays, setUNIFlexDays] = React.useState([])
     const [UNIFlexDates, setUNIFlexDates] = React.useState([])
+    const[paymentPrice, setPaymentPrice] = React.useState(0)
+    const[paymentNights, setPaymentNights] = React.useState(0)
 
     const [UNIBNBDates, setUNIBNBDates] = React.useState([])
     const [UNIBNBDaysCount, setUNIBNBDaysCount] = React.useState(getDayDifference(date[0], date[1]))
 
-    var temp = []
+    var alreadyBookedDatesParsed = []
     alreadyBookedDates.forEach(i =>{
-      temp = [...temp, new Date(i)]
+      alreadyBookedDatesParsed = [...alreadyBookedDatesParsed, new Date(i)]
     })
-    const [alreadyBookedDatesParsed, setAlreadyBookedDatesParsed] = React.useState(temp)
+
+    // var alreadyBookedDatesParsedAddedDay =[];
+    // alreadyBookedDatesParsed.forEach(i=>{
+    //   alreadyBookedDatesParsedAddedDay=[...alreadyBookedDatesParsedAddedDay, new Date(i.setTime(i.getTime() + dateOffset))]
+    // })
+
+    //const [alreadyBookedDatesParsed, setAlreadyBookedDatesParsed] = React.useState(temp)
+
+    console.log(alreadyBookedDates)
 
     const [submitFlag, setSubmitFlag] = React.useState(false)
 
@@ -60,12 +73,16 @@ const navigate = useNavigate();
 
     const [open, setOpen] = React.useState(false);
 
+    const [processPaymentFlag, setProcessPaymentFlag] = React.useState(false);
+
     const[paymentSuccess, setPaymentSuccess] = React.useState(false)
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-    const studentID = JSON.parse(localStorage.getItem("user"))._id;
+    const studentID = localStorage.getItem("studentId");
+
+    console.log(studentID)
 
     const useStyles = makeStyles(theme => ({
         root: {
@@ -96,35 +113,30 @@ const navigate = useNavigate();
 
 const classes = useStyles();
 
-console.log(paymentSuccess)
-
 const processPayment = () => {
-  navigate('/payment-page', { state:{ 
-    nights: postingType === "UNIBNB" ? getUNIBNBNumberOfDays(date[0], date[1]) :  postingType === "UNIFlex" ? getUNIFlexNumberOfDays(date[0], date[1],UNIFlexDays) : "WS",
-    price: postingType === "WS" ? (getMonthDifference(date[0],date[1]) * price).toFixed(2) : postingType === "UNIBNB" ? (getUNIBNBNumberOfDays(date[0], date[1]) * price/30).toFixed(2) : (getUNIFlexNumberOfDays(date[0],date[1], UNIFlexDays) * price/30).toFixed(2)
- 
-}
-  })
-}
+    setPaymentNights( postingType === "UNIBNB" ? getUNIBNBNumberOfDays(date[0], date[1]) :  postingType === "UNIFlex" ? getUNIFlexNumberOfDays(date[0], date[1],UNIFlexDays) : "WS")
+    setPaymentPrice( postingType === "WS" ? (getMonthDifference(date[0],date[1]) * price).toFixed(2) : postingType === "UNIBNB" ? (getUNIBNBNumberOfDays(date[0], date[1]) * price/30).toFixed(2) : (getUNIFlexNumberOfDays(date[0],date[1], UNIFlexDays) * price/30).toFixed(2))
 
-React.useEffect(() => {
-  function checkPaymentReceived() {
-    const item = localStorage.getItem('paymentReceived')
-
-    console.log(item)
-
-    if (item === true) {
-      setSubmitFlag(item)
-    }
+    setProcessPaymentFlag(true)
   }
 
-  window.addEventListener('storage', checkPaymentReceived)
+// React.useEffect(() => {
+//   function checkPaymentReceived() {
+//     const item = localStorage.getItem('paymentReceived')
 
-  return () => {
-    window.removeEventListener('storage', checkPaymentReceived)
-  }
-}, [])
+//     console.log(item)
 
+//     if (item === true) {
+//       setSubmitFlag(item)
+//     }
+//   }
+
+//   window.addEventListener('storage', checkPaymentReceived)
+
+//   return () => {
+//     window.removeEventListener('storage', checkPaymentReceived)
+//   }
+// }, [])
 
 useQuery(
     ["bookAccomodation", { 
@@ -132,27 +144,31 @@ useQuery(
       landlordId: landlordID,
       studentId: studentID,
       agreementType: postingType,
-      startDate: date[0],
-      endDate: date[1],
+      startDate: moment(date[0]).zone('+01:00'),
+      endDate: moment(date[1]).zone('+01:00'),
       flexiDays: UNIFlexDays,
       bookedDates: postingType === "UNIFlex" ? UNIFlexDates : UNIBNBDates,
       postingType: postingType,
     }],
     bookAccomodation,{
     onSuccess: (data)=>{
-        console.log(data)
-      if(data.success === false){
-          if(data.dates){
-            var temp = []
-              data.dates.forEach(date=>{
-                temp = [...temp, new Date(date)]
-              })
-              setUNIFlexConflictDates(temp)
-              setOpen(true);
-              setSubmitFlag(false)
-
-      }
-    }
+        if(data.code === 201){  
+          console.log(data)
+          setProcessPaymentFlag(false)
+          setSubmitFlag(false)
+         // processPayment()
+        }
+      //  else if(data.success === false){
+      //     if(data.dates){
+      //       var temp = []
+      //         data.dates.forEach(date=>{
+      //           temp = [...temp, new Date(date)]
+      //         })
+      //         console.log(temp)
+      //         setUNIFlexConflictDates(temp)
+      //         setOpen(true);
+      //         setSubmitFlag(false)
+    console.log(data)
     },
     onError: (err) =>{
         setSubmitFlag(false)
@@ -208,15 +224,41 @@ const UNIFlexReservationHandler = () =>{
     const start = date[0];
     const end = date[1];
 
-    var tempDatesArray = []
+    var UNIFlexDatesTemp = []
+
+    var tempDatesArrayConflicts =[]
 
     for (var d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
         if(UNIFlexDays.includes(d.getDay())){
-            tempDatesArray = [...tempDatesArray, new Date(d)]
+          UNIFlexDatesTemp = [...UNIFlexDatesTemp, moment(d, "MM-DD-YYYY").zone('+01:00')]
         }
      }
-     setUNIFlexDates(tempDatesArray);
-     processPayment()
+
+     UNIFlexDatesTemp.forEach(d=>{
+       if(alreadyBookedDatesParsed.find(o=> o.getTime() === d.valueOf()) !== undefined){
+         tempDatesArrayConflicts = [...tempDatesArrayConflicts,  moment(d, "MM-DD-YYYY").zone('+01:00') ]    
+        }
+     })
+
+     if(tempDatesArrayConflicts.length === 0){
+        setUNIFlexDates(UNIFlexDatesTemp)
+        processPayment()
+        //setSubmitFlag(true)
+     }
+     else if(tempDatesArrayConflicts.length > 0){
+       setUNIFlexDates(UNIFlexDatesTemp)
+       console.log(tempDatesArrayConflicts)
+       setUNIFlexConflictDates(tempDatesArrayConflicts)
+       setOpen(true)
+     }
+    // for (var d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
+
+    //  if(alreadyBookedDatesParsed.find(o => o.getTime() === d.getTime()) === undefined){
+    //   tempDatesArray = [...tempDatesArray, new Date(d)]
+
+    //  setUNIFlexDates(tempDatesArray);
+    //  setSubmitFlag(true)
+     //processPayment()
 } 
 
 const UNIBNBReservationHandler = () =>{
@@ -240,6 +282,10 @@ const handleReservationMade = (e) => {
     if(postingType === "UNIBNB") UNIBNBReservationHandler();
 }
 
+const cb = (result)=> {
+  setSubmitFlag(result)
+}
+
 const cancelUNIFlex = (e) => {
     e.preventDefault();
     setOpen(false)
@@ -252,18 +298,25 @@ const disableBookedDates = (d) => {
 }
 
 const continueUNIFlexWithoutConflicts = (e) => {
+
+
+  console.log(UNIFlexDates)
+  console.log(UNIFlexConflictDates)
+
     e.preventDefault();
-
     var temp = [];
-
     for (var i = 0; i < UNIFlexDates.length; i++){
-       const match = UNIFlexConflictDates.find(d => d.getTime() === UNIFlexDates[i].getTime());
-       if(match === undefined){
-        temp = [...temp, UNIFlexDates[i]]
-       }
+      if(UNIFlexConflictDates.find(o => o.valueOf() === UNIFlexDates[i].valueOf()) === undefined){
+        temp = [...temp, new Date( UNIFlexDates[i])]
+      }
 
-    }
+      //  const match = UNIFlexConflictDates.find(d => d.getTime() === UNIFlexDates[i].getTime());
+      //  if(match === undefined){
+      //   temp = [...temp, UNIFlexDates[i]]
+      //  }
+      }
     setUNIFlexDates(temp);
+    //setSubmitFlag(true)
     processPayment()
     setOpen(false)
     }
@@ -274,6 +327,10 @@ const daysSelectedCallback = (days) => {
    
 const handleClose = () => {
     setOpen(false);
+  };
+
+  const handlePPClose = () => {
+    setProcessPaymentFlag(false);
   };
 
   return (
@@ -292,7 +349,7 @@ const handleClose = () => {
         value={date}
         minDate={date[0]}
         maxDate={date[1]}
-        disabled={postingType === "WS"}
+        disabled={disabled || postingType === "WS"}
         onChange={(newValue) => {
           setNewDate(new Date(newValue));
         }}
@@ -311,8 +368,8 @@ const handleClose = () => {
         value={date}
         minDate={startDateMinus1Day}
         maxDate={endDateMinus1Day}
-        shouldDisableDate={ postingType === "UNIBNB" ? disableBookedDates: null}
-        disabled={postingType === "WS"}
+        shouldDisableDate={ postingType === "UNIBNB" || postingType === "UNIFlex" ? disableBookedDates: null}
+        disabled={disabled || postingType === "WS"}
         onChange={(newValue) => {
           setNewDate(newValue);
         }}
@@ -348,7 +405,7 @@ const handleClose = () => {
 
   <Button 
   onClick={handleReservationMade} 
-
+  disabled={disabled}
   type="submit"
   variant="contained" >
       Reserve
@@ -366,7 +423,7 @@ const handleClose = () => {
       <DialogContentText sx={{display: "flex", flexDirection: "column", justifyContent: "center", alignItems: "center" }} id="alert-dialog-slide-description">
 
       {UNIFlexConflictDates.map((d, index) =>(
-<div style={{color: "black"}} key={index}>{JSON.stringify(new Date(d.setTime(d.getTime() + dateOffset))).substring(1,11)}</div>
+<div style={{color: "black"}} key={index}>{JSON.stringify(new Date(d.valueOf()) + dateOffset ).substring(1,11)}</div>
       ))}
       </DialogContentText>
     </DialogContent>
@@ -375,6 +432,19 @@ const handleClose = () => {
       <Button onClick={continueUNIFlexWithoutConflicts}>Confirm</Button>
     </DialogActions>
   </Dialog>
+
+  <Dialog
+   open={processPaymentFlag}
+   TransitionComponent={Transition}
+   keepMounted
+   onClose={handlePPClose}
+   aria-describedby="alert-dialog-slide-description"
+  >
+    <DialogContent>
+    <ProcessPaymentStripe cb={cb} price={paymentPrice} nights={paymentNights}  /> 
+    </DialogContent>
+  </Dialog>
+
 </>
   )
 }

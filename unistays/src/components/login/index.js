@@ -11,6 +11,7 @@ import MuiAlert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import { red } from "@material-ui/core/colors";
 import Link from '@mui/material/Link';
+import { getStudentDetails } from "../../api/api";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -21,6 +22,7 @@ export default function Login(props) {
     const [email, setEmail] = React.useState("");
     const [password, setPassword] = React.useState("");
     const [loginFlag, setLoginFlag] = React.useState(false);
+    const [loginCompletedFlag, setLoginCompletedFlag] = React.useState(false);
     const [fail, setFail] = React.useState(false);
 
     const navigate = useNavigate();
@@ -58,6 +60,9 @@ export default function Login(props) {
             setLoginFlag(false)
             if(!data.token){
               console.log("No token received");
+              setFail(true)
+              setEmail("")
+              setPassword("")
             }
             else{
               console.log(data.token)
@@ -66,7 +71,12 @@ export default function Login(props) {
               localStorage.setItem("userEmail", JSON.stringify(user.email));
               localStorage.setItem("userRole", JSON.stringify(user.role));
               localStorage.setItem("token", token);
-              navigate("/", { replace: true})
+              if(user.role ==="Student"){
+                setLoginCompletedFlag(true)
+              }
+              else{
+                navigate("/", { replace: true})
+              }
             }
         },
         onError: (err) =>{
@@ -75,6 +85,22 @@ export default function Login(props) {
         },
           enabled: loginFlag === true,
           cacheTime: 10000
+        }
+      );
+
+      useQuery(
+        ["getStudentDetails", { email: email }],
+        getStudentDetails,{
+        onSuccess: (data)=>{
+          console.log(data)
+          localStorage.setItem("studentId", data.existingStudent._id)
+          navigate("/", { replace: true})
+        },
+        onError: (err) =>{
+            console.log(err);
+        },
+        enabled: loginCompletedFlag === true,
+        cacheTime: 500,
         }
       );
 
