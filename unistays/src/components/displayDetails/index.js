@@ -9,15 +9,17 @@ import { AttachFile, Delet } from '@mui/icons-material';
 import { makeStyles } from '@material-ui/core';
 import FriendListContainer from '../friendListContainer';
 import temp from '../../resource/images/landingJPG.jpg'
-import { uploadStudentProfilePicture } from '../../api/api';
+import { uploadStudentProfilePicture, uploadLandlordProfilePicture } from '../../api/api';
 import prop from '../../resource/images/Portrait_Placeholder.png'
 
 export default function DisplayDetails( { role, user } ) {
 
   const [attachFilesFlag, setAttachFilesFlag] = React.useState(false);
   const [uploadStudentProfilePictureFlag, setUploadStudentProfilePictureFlag] = React.useState(false);
+  const [uploadLandlordProfilePictureFlag, setUploadLandlordProfilePictureFlag] = React.useState(false);
   const [userImage, setUserImages] = React.useState([]);
   const [objURL, setObjURL] = React.useState("")
+  const [token, setToken ] = React.useState(localStorage.getItem("token"))
 
 
 
@@ -30,7 +32,8 @@ export default function DisplayDetails( { role, user } ) {
   useQuery(
     ["uploadProfilePictureStudent", { 
       student_email: user.student_email,
-      documents: userImage
+      documents: userImage,
+      token: token
     }],
     uploadStudentProfilePicture,{
     onSuccess: (data)=>{
@@ -42,6 +45,26 @@ export default function DisplayDetails( { role, user } ) {
       setUploadStudentProfilePictureFlag(false)
     },
       enabled: uploadStudentProfilePictureFlag === true,
+      cacheTime: 10000
+    }
+  );
+
+  useQuery(
+    ["uploadProfilePictureLandlord", { 
+      email: user.email,
+      documents: userImage,
+      token: token
+    }],
+    uploadLandlordProfilePicture,{
+    onSuccess: (data)=>{
+      console.log(data);
+      setUploadLandlordProfilePictureFlag(false)
+    },
+    onError: (err) =>{
+      console.log(err);
+      setUploadLandlordProfilePictureFlag(false)
+    },
+      enabled: uploadLandlordProfilePictureFlag === true,
       cacheTime: 10000
     }
   );
@@ -59,7 +82,12 @@ export default function DisplayDetails( { role, user } ) {
     setUserImages(f);
     setObjURL(URL.createObjectURL(f[0]))
     setAttachFilesFlag(false);
-    setUploadStudentProfilePictureFlag(true)
+    if(user === "Student"){
+       setUploadStudentProfilePictureFlag(true)
+    }
+    else{
+      setUploadLandlordProfilePictureFlag(true)
+    }
     };
 
   const useStyles = makeStyles(theme => ({
@@ -116,10 +144,12 @@ export default function DisplayDetails( { role, user } ) {
 
           <Paper sx={{display: "flex", flexDirection: "column", flexWrap:"wrap", alignItems:"flex-start",minWidth:"35vw",gap:2, marginTop: 3, marginLeft: 3, height:"30vh", padding: 5 }}>
    
-            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>College: {user.college}</Typography>
-        
+   { role === "Student" &&
+   <>
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>College: {user.college}</Typography>   
             <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Year of Study: {user.year_of_study}</Typography>
-         
+             </>
+             }
             <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Date of Birth: {user.date_of_birth}</Typography>
  
             <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Age: { Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10) }</Typography>

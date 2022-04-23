@@ -1,5 +1,5 @@
-const token = localStorage.getItem("token")
-console.log(token)
+// const token = localStorage.getItem("token")
+// console.log(token)
 
 
 export const register = async (args) => {
@@ -18,7 +18,7 @@ export const register = async (args) => {
         body: JSON.stringify(params)
     });
     const content = await response.json();
-    console.log(content);
+    return content;
 }
 
 export const getRefreshToken = async () => {
@@ -79,6 +79,8 @@ export const studentDetails = async (args) => {
 
 export const getStudentDetails = async (args) => { 
     const email = args.queryKey[1].email
+    const token = args.queryKey[1].token
+    
     const response = await fetch(`/api/students/${email}`,{
         method: "GET",
         headers: {
@@ -93,6 +95,9 @@ export const getStudentDetails = async (args) => {
 
  export const getLandlordDetails = async (args) => { 
     const email = args.queryKey[1].email
+    const token = args.queryKey[1].token
+    console.log(token)
+    console.log(email)
 
     const response = await fetch(`/api/landlords/${email}`,{
         method: "GET",
@@ -135,6 +140,7 @@ export const landlordDetails = async (args) => {
 
 export const postAccomodation = async (args) => {
     console.log(args.queryKey[1])
+    const token = args.queryKey[1].token
 
     const propertyFormData = new FormData();
 
@@ -181,9 +187,10 @@ export const postAccomodation = async (args) => {
     console.log(content);
 }
 
-export const getAccomodations = async () => { 
+export const getAccomodations = async (args) => { 
+    const token = args.queryKey[1].token
 
-    const response = await fetch(`/api/accomodations`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/accomodations`,{
         method: "GET",
         headers: {
         'Authorization': token,
@@ -199,7 +206,8 @@ export const getAccomodations = async () => {
 
  export const getAccomodationById = async (args) => { 
 
-    var id = args.queryKey[1];
+    const token = args.queryKey[1].token
+    var id = args.queryKey[1].idClicked
 
     const response = await fetch(`/api/accomodations/${id}`,{
         method: "GET",
@@ -218,6 +226,7 @@ export const getAccomodations = async () => {
     console.log(args.queryKey[1])
     const id = args.queryKey[1]._id
     const postingType = args.queryKey[1].postingType
+    const token = args.queryKey[1].token
 
     const params = {
         landlord_id: args.queryKey[1].landlordId,
@@ -245,6 +254,7 @@ export const getAccomodations = async () => {
 export const getLandlordProperties = async (args) => { 
 
     var id = args.queryKey[1].id;
+    const token = args.queryKey[1].token
 
     console.log(id)
 
@@ -264,6 +274,7 @@ export const getLandlordProperties = async (args) => {
  export const deleteAccomodation = async (args) => { 
 
     var id = args.queryKey[1].id;
+    const token = args.queryKey[1].token
 
     console.log(args.queryKey[1])
 
@@ -281,6 +292,7 @@ export const getLandlordProperties = async (args) => {
  }
 
  export const getStudents = async (args) => {
+    const token = args.queryKey[1].token
     const response = await fetch(`/api/students`,{
         method: "GET",
         headers: {
@@ -295,7 +307,8 @@ export const getLandlordProperties = async (args) => {
  }
 
  export const getFriends = async (args) => {
-    const student_email = args.queryKey[1]
+    const student_email = args.queryKey[1].email
+    const token = args.queryKey[1].token
     const response = await fetch(`/api/students/${student_email}/friends`,{
         method: "GET",
         headers: {
@@ -309,8 +322,11 @@ export const getLandlordProperties = async (args) => {
     return content;
  }
  export const addFriend = async (args) => {
+
     const student_email = args.queryKey[1].email
     const friends_id = args.queryKey[1].friends_id
+    const token = args.queryKey[1].token
+
     const params = {
         friends_id: friends_id 
     }
@@ -334,6 +350,8 @@ export const getLandlordProperties = async (args) => {
     var documents = args.queryKey[1].documents;
     const student_email = args.queryKey[1].student_email;
 
+    const token = args.queryKey[1].token
+
     documents.forEach((file => {
         formData.append("documents", file);
     }))
@@ -350,8 +368,34 @@ export const getLandlordProperties = async (args) => {
     return content;
 }
 
+export const uploadLandlordProfilePicture = async (args) => {
+
+    const formData = new FormData();
+
+    var documents = args.queryKey[1].documents;
+    const email = args.queryKey[1].email;
+
+    const token = args.queryKey[1].token
+
+    documents.forEach((file => {
+        formData.append("documents", file);
+    }))
+
+    const response = await fetch(`/api/landlords/${email}/profile-picture`,{
+        method: "POST",
+        headers: {
+            'Authorization': token,
+            "Accepts":"application/json"
+        },
+        body: formData
+    });
+    const content = await response.json();
+    return content;
+}
+
 export const getFriendsLocations = async (args) => {
-    const ids = args.queryKey[1]
+    const ids = args.queryKey[1].friendsIds
+    const token = args.queryKey[1].token
     console.log(ids)
     const response = await fetch(`/api/accomodations/friends-locations`,{
         method: "POST",
@@ -370,6 +414,7 @@ export const getFriendsLocations = async (args) => {
 
  export const getStudentBookings = async (args) => {
     const student_id = args.queryKey[1].id
+    const token = args.queryKey[1].token
     const response = await fetch(`/api/accomodations/student-bookings/${student_id}`,{
         method: "GET",
         headers: {
@@ -401,6 +446,7 @@ export const getFriendsLocations = async (args) => {
      const student_id = args.queryKey[1].student_id
      const student_name = args.queryKey[1].student_name
      const review = args.queryKey[1].review
+     const token = args.queryKey[1].token
 
      const body = {
         student_id: student_id,

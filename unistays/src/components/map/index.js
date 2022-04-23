@@ -34,9 +34,10 @@ function MapGoogle(props){
     const [friendsCurrentLocationIds, setFriendsCurrentLocationIds] = React.useState([])
     const email = JSON.parse(localStorage.getItem("userEmail"));
     const [isLoading, setLoading] = React.useState(true);
+    const [token, setToken ] = React.useState(localStorage.getItem("token"))
 
     useQuery(
-        ["getAccomodationById",idClicked],
+        ["getAccomodationById",{idClicked: idClicked, token: token}],
         getAccomodationById,{
         onSuccess: (data)=>{
           console.log(data);
@@ -51,11 +52,11 @@ function MapGoogle(props){
       );
 
       useQuery(
-        ["getFriends", email ],
+        ["getFriends", {email: email, token: token}],
         getFriends,{
         onSuccess: (data)=>{
           var ids = [] 
-          data.studentsData.forEach(student => {
+          data?.studentsData?.forEach(student => {
             ids = [...ids, student._id]
           })
             setFriendsIds(ids)
@@ -69,7 +70,7 @@ function MapGoogle(props){
       );
 
       useQuery(
-        ["getFriendsLocations", friendsIds ],
+        ["getFriendsLocations", {friendsIds: friendsIds, token: token}],
         getFriendsLocations,{
         onSuccess: (data)=>{
           console.log(data)

@@ -95,7 +95,7 @@ export default function StudentForm() {
  
     const [submitFlag, setSubmitFlag] = React.useState(false);
     const [submitLandlordFlag, setSubmitLandlordFlag] = React.useState(false);
-
+    const [token, setToken ] = React.useState(localStorage.getItem("token"))
     const [attachFilesFlag, setAttachFilesFlag] = React.useState(false);
 
     const [fail, setFail] = React.useState(false);
@@ -120,7 +120,7 @@ export default function StudentForm() {
           college: college,
           year_of_study: yearOfStudy,
           allow_show_location: allowShowLocation,
-          documents: files
+          documents: files, 
         }],
         studentDetails,{
         onSuccess: (data)=>{
@@ -187,17 +187,21 @@ export default function StudentForm() {
         };
 
     const submitForm = async () =>{
-     
+
+      if(fname === "" && lname === "" && address === "" && dateOfBirth === ""){
+        setFail(true)
+    }
+    else{
             if(userRole === "Student"){
               setSubmitFlag(true);
             }
             else if(userRole === "Landlord"){
-              if(email !== "" && fname !== "" && lname !== "" && address !== "" && dateOfBirth !== "" && phoneNumber !== "" )
               setSubmitLandlordFlag(true);
             }
-        else {
-            console.log("Unable to Submit");
-            setFail(true);
+            else{
+              console.log("Unable to Submit");
+              setFail(true);
+            }
         }
     };
     

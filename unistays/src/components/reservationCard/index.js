@@ -75,6 +75,8 @@ const navigate = useNavigate();
 
     const [processPaymentFlag, setProcessPaymentFlag] = React.useState(false);
 
+    const [token, setToken ] = React.useState(localStorage.getItem("token"))
+
     const[paymentSuccess, setPaymentSuccess] = React.useState(false)
 
     const theme = useTheme();
@@ -120,24 +122,6 @@ const processPayment = () => {
     setProcessPaymentFlag(true)
   }
 
-// React.useEffect(() => {
-//   function checkPaymentReceived() {
-//     const item = localStorage.getItem('paymentReceived')
-
-//     console.log(item)
-
-//     if (item === true) {
-//       setSubmitFlag(item)
-//     }
-//   }
-
-//   window.addEventListener('storage', checkPaymentReceived)
-
-//   return () => {
-//     window.removeEventListener('storage', checkPaymentReceived)
-//   }
-// }, [])
-
 useQuery(
     ["bookAccomodation", { 
       _id: accomodationID,  
@@ -149,25 +133,16 @@ useQuery(
       flexiDays: UNIFlexDays,
       bookedDates: postingType === "UNIFlex" ? UNIFlexDates : UNIBNBDates,
       postingType: postingType,
-    }],
+      token: token
+    } ],
     bookAccomodation,{
     onSuccess: (data)=>{
         if(data.code === 201){  
           console.log(data)
           setProcessPaymentFlag(false)
           setSubmitFlag(false)
-         // processPayment()
+          navigate(0)
         }
-      //  else if(data.success === false){
-      //     if(data.dates){
-      //       var temp = []
-      //         data.dates.forEach(date=>{
-      //           temp = [...temp, new Date(date)]
-      //         })
-      //         console.log(temp)
-      //         setUNIFlexConflictDates(temp)
-      //         setOpen(true);
-      //         setSubmitFlag(false)
     console.log(data)
     },
     onError: (err) =>{
@@ -251,14 +226,6 @@ const UNIFlexReservationHandler = () =>{
        setUNIFlexConflictDates(tempDatesArrayConflicts)
        setOpen(true)
      }
-    // for (var d = new Date(start); d <= end; d.setDate(d.getDate() + 1)) {
-
-    //  if(alreadyBookedDatesParsed.find(o => o.getTime() === d.getTime()) === undefined){
-    //   tempDatesArray = [...tempDatesArray, new Date(d)]
-
-    //  setUNIFlexDates(tempDatesArray);
-    //  setSubmitFlag(true)
-     //processPayment()
 } 
 
 const UNIBNBReservationHandler = () =>{
@@ -309,11 +276,6 @@ const continueUNIFlexWithoutConflicts = (e) => {
       if(UNIFlexConflictDates.find(o => o.valueOf() === UNIFlexDates[i].valueOf()) === undefined){
         temp = [...temp, new Date( UNIFlexDates[i])]
       }
-
-      //  const match = UNIFlexConflictDates.find(d => d.getTime() === UNIFlexDates[i].getTime());
-      //  if(match === undefined){
-      //   temp = [...temp, UNIFlexDates[i]]
-      //  }
       }
     setUNIFlexDates(temp);
     //setSubmitFlag(true)

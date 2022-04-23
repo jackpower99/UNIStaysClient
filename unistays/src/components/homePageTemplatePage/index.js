@@ -27,6 +27,8 @@ export default function HomePageTemplatePage() {
       const [showFilterCard, setShowFilterCard] = React.useState(false)
       const [filterCardOpen, setFilterCardOpen] = React.useState(false)
 
+      const [token, setToken ] = React.useState(localStorage.getItem("token"))
+
       const handleStudentSignUpButtonClicked = (e)=>{
         e.preventDefault()
         navigate('/register',{ state:{selectedRole: 'Student'}})
@@ -105,7 +107,7 @@ export default function HomePageTemplatePage() {
       const classes = useStyles();
 
       useQuery(
-        "getAccomodations",
+        ["getAccomodations",{token: token}],
         getAccomodations,{
         onSuccess: (data)=>{
             setAccomodations(data)
@@ -129,7 +131,10 @@ export default function HomePageTemplatePage() {
     <div className = {classes.root}>
     <Paper elevation={0} className={classes.createAccountContainer}>
       <Grid container spacing={1}>
+      { !token &&
+        <>
       <Grid sx={{ display: "flex", justifyContent: "center" }} item xs={6}>
+   
     <Button onClick={handleStudentSignUpButtonClicked} sx={{ height: '8vh', width: '15vw',  backgroundColor: "#FE7E6D", fontSize: 20, ":hover": {backgroundColor: "#FE7E6D"}}} type="submit" variant="contained" color="primary">
           Student Account
         </Button>
@@ -138,7 +143,10 @@ export default function HomePageTemplatePage() {
       <Button onClick={handleLandlordSignUpButtonClicked} sx={{ height: '8vh', width: '15vw', backgroundColor: "white", color: '#FE7E6D', fontSize: 20, ":hover": {backgroundColor: "white"}}} type="submit" variant="contained" color="secondary">
         Landlord Account
       </Button>
+  
       </Grid>
+      </>
+        }
       </Grid>
      </Paper>
      <AgreementCardsDisplay />

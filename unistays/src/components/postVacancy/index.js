@@ -141,6 +141,7 @@ export default function PostVacancy() {
       const [pricePerMonth, setPricePerMonth] = React.useState(0)
       const [sizeSquareMeters, setSizeSquareMeters] = React.useState(0)
       const [roomsArray, setRoomsArray] = React.useState([]);
+      const [token, setToken ] = React.useState(localStorage.getItem("token"))
 
       const [lat, setLat] = React.useState(0);
       const [lng, setLng] = React.useState(0);
@@ -172,6 +173,7 @@ export default function PostVacancy() {
           amenities: ammenityNames,
           price_per_month: pricePerMonth,
           rooms: roomsArray,
+          token: token
         }],
         postAccomodation,{
         onSuccess: (data)=>{

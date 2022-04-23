@@ -14,6 +14,8 @@ export default function LandlordPageTemplate() {
  const [emailLS, setEmail ] = useState(JSON.parse(localStorage.getItem("userEmail")))
  const [role, setRole ] = useState(JSON.parse(localStorage.getItem("userRole")))
 
+ const [token, setToken ] = useState(localStorage.getItem("token"))
+
  const [ landlord, setLandlord ] = useState({});
  const [ menuItem, setMenuItem ] = useState("Social");
 
@@ -42,8 +44,12 @@ export default function LandlordPageTemplate() {
   setMenuItem(selected);
  }
 
+ console.log(localStorage.getItem("token"))
+
+console.log(role)
+
  useQuery(
-  ["getLandlordDetails", { email: emailLS }],
+  ["getLandlordDetails", { email: emailLS, token: token }],
   getLandlordDetails,{
   onSuccess: (data)=>{
     landlordRestructured(data.existingLandlord)
@@ -53,13 +59,13 @@ export default function LandlordPageTemplate() {
   onError: (err) =>{
       console.log(err);
   },
-  cacheTime: 500,
-  enabled: role === "Landlord"
+  refetchOnMount: "always",
+  //enabled: role === "Landlord"
   }
 );
 
 useQuery(
-  ["getStudentDetails", { email: emailLS }],
+  ["getStudentDetails", { email: emailLS, token: token }],
   getStudentDetails,{
   onSuccess: (data)=>{
     console.log(data)
@@ -79,7 +85,7 @@ console.log(emailLS)
 
 
 useQuery(
-  ["getLandlordProperties", { id: landlordId }],
+  ["getLandlordProperties", { id: landlordId, token: token }],
   getLandlordProperties,{
   onSuccess: (data)=>{
   setLandlordProperties(data)
@@ -101,7 +107,7 @@ const action = (actionToDo, acc) => {
 }
 
 useQuery(
-["delete accomodation", {id: accomodationDeleted._id}],
+["delete accomodation", {id: accomodationDeleted._id, token: token}],
 deleteAccomodation,{
 onSuccess: (data)=>{
     setLandlordProperties(data.accomodations)
@@ -116,7 +122,7 @@ onError: (err) =>{
 );
 
 useQuery(
-  ["getStudentBookings", { id: localStorage.getItem("studentId")}],
+  ["getStudentBookings", { id: localStorage.getItem("studentId"), token: token }],
   getStudentBookings,{
   onSuccess: (data)=>{
     setStudentBookings(data)

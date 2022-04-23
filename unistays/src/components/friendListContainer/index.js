@@ -7,6 +7,7 @@ import FriendList from '../friendList';
 import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { getFriends, addFriend } from '../../api/api';
+import { useNavigate } from 'react-router-dom';
 
 export default function FriendListContainer() {
 
@@ -45,6 +46,9 @@ export default function FriendListContainer() {
   const [email, setEmail ] = React.useState(JSON.parse(localStorage.getItem("userEmail")));
   const [userList, setUserList] = React.useState([])
   const [friendsReceivedFlag, setFriendsReceivedFlag] = React.useState(false)
+  const [token, setToken ] = React.useState(localStorage.getItem("token"))
+
+  const navigate = useNavigate()
 
   const [runQueryFlag, setRunQueryFlag] = React.useState(false);
 
@@ -56,7 +60,7 @@ export default function FriendListContainer() {
   };
 
   useQuery(
-    "getStudents",
+    ["getStudents",{token: token}],
     getStudents,{
     onSuccess: (data)=>{
         setStudents(data)
@@ -69,7 +73,7 @@ export default function FriendListContainer() {
   );
 
   useQuery(
-    ["getFriends", email ],
+    ["getFriends",{email: email, token: token}],
     getFriends,{
     onSuccess: (data)=>{
         setFriends(data.studentsData)
@@ -89,11 +93,12 @@ export default function FriendListContainer() {
   }
 
   useQuery(
-    ["addFriend", {email: email, friends_id: friendToAdd._id}],
+    ["addFriend", {email: email, friends_id: friendToAdd._id, token: token}],
     addFriend,{
     onSuccess: (data)=>{
         console.log(data)
         setRunQueryFlag(false)
+        navigate(0)
     },
     onError: (err) =>{
       console.log(err);

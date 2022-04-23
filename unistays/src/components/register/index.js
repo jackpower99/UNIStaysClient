@@ -62,8 +62,12 @@ export default function Register() {
         register,{
         onSuccess: (data)=>{
             console.log(data)
-            setRegisterFlag(false)
-            navigate("/student-form", { state:{ role: role, email: email } } );
+            setRegisterFlag(false) 
+            if(data.success === true) {
+              navigate("/student-form", { state:{ role: role, email: email } } )
+            }else{
+              setFail(true)
+            }
         },
         onError: (err) =>{
             console.log(err);

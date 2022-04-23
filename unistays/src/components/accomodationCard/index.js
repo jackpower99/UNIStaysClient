@@ -25,6 +25,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 import { useQuery } from "react-query";
 import { postAccomodationReview } from "../../api/api";
 import prop from '../../resource/images/prop.jpg'
+import { useNavigate } from "react-router-dom";
 
 const useStyles = makeStyles((theme)=>({
   card: { width: "20vw", height: "60vh",  backgroundColor: "#f2c8c2", color:"white"},
@@ -50,6 +51,9 @@ export default function AccomodationCard({ accomodation, action }) {
   const [review, setReview ] = React.useState("")
   const [postReviewFlag, setPostReviewFlag] = React.useState(false)
   const [studentName, setStudentName] = React.useState("")
+  const [token, setToken ] = React.useState(localStorage.getItem("token"))
+
+  const navigate = useNavigate()
 
   const [open, setOpen] = React.useState(false);
 
@@ -79,10 +83,10 @@ React.useEffect(() => {
 }, [])
 
 useQuery(
-  ["postReview", { acc_id: accomodation._id, student_id: studentId, student_name: studentName, review: review  }],
+  ["postReview", { acc_id: accomodation._id, student_id: studentId, student_name: studentName, review: review, token: token  }],
   postAccomodationReview,{
   onSuccess: (data)=>{
-    console.log(data)
+    navigate(0)
   },
   onError: (err) =>{
       console.log(err);
@@ -145,9 +149,6 @@ console.log(studentBooking)
           <Typography variant="h7" component="p">
               Total Nights Booked: { role === "Student" ? numberOfDaysStudent :accomodation.booked_dates.length}
               </Typography>
-              <Typography variant="h7" component="p">
-              County: {accomodation.county}
-            </Typography>
           </Grid>
           </Grid>
           </CardContent>

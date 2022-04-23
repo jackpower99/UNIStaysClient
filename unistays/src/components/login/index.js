@@ -11,7 +11,7 @@ import MuiAlert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import { red } from "@material-ui/core/colors";
 import Link from '@mui/material/Link';
-import { getStudentDetails } from "../../api/api";
+import { getStudentDetails, getLandlordDetails } from "../../api/api";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
     return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
@@ -89,7 +89,7 @@ export default function Login(props) {
       );
 
       useQuery(
-        ["getStudentDetails", { email: email }],
+        ["getStudentDetails", { email: email, token:  localStorage.getItem("token")}],
         getStudentDetails,{
         onSuccess: (data)=>{
           console.log(data)
@@ -103,6 +103,22 @@ export default function Login(props) {
         cacheTime: 500,
         }
       );
+
+      // useQuery(
+      //   ["getLandlordDetails", { email: email, token:  localStorage.getItem("token")}],
+      //   getLandlordDetails,{
+      //   onSuccess: (data)=>{
+      //     console.log(data)
+      //     localStorage.setItem("landlordId", data.existingStudent._id)
+      //     navigate("/", { replace: true})
+      //   },
+      //   onError: (err) =>{
+      //       console.log(err);
+      //   },
+      //   enabled: loginCompletedFlag === true && role === "Landlord",
+      //   cacheTime: 500,
+      //   }
+      // );
 
       const handleClose = (event, reason) => {
         if (reason === 'clickaway') {
