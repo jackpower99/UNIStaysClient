@@ -87,7 +87,11 @@ useQuery(
   ["getLandlordProperties", { id: landlordId, token: token }],
   getLandlordProperties,{
   onSuccess: (data)=>{
-  setLandlordProperties(data)
+    if(data.success === true){
+  setLandlordProperties(data.data)
+    }else{
+      console.log("No properties")
+    }
   },
   onError: (err) =>{
       console.log(err);
