@@ -154,19 +154,22 @@ export default function DisplayDetails( { role, user } ) {
 
           <Paper sx={{display: "flex", flexDirection: "column", flexWrap:"wrap", alignItems:"flex-start",minWidth:"35vw",gap:2, marginTop: 3, marginLeft: 3, height:"30vh", padding: 5 }}>
    
-   { role === "Student" &&
-   <>
-            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>College: {user.college}</Typography>   
-            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Year of Study: {user.year_of_study}</Typography>
-             </>
-             }
-            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Date of Birth: {user.date_of_birth}</Typography>
+          <>
+{ role === "Student" &&
+
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>College: {user.college}</Typography>  
+}
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}}  variant='p'>Address: {user.address}</Typography> 
+
+        { role === "Student" &&
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Year of Study: {user.year_of_study}</Typography>
+}
+         </>
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Date of Birth: {user.date_of_birth}</Typography>
  
-            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Age: { Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10) }</Typography>
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Age: { Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10) }</Typography>
 
-            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}}  variant='h6'>Address: {user.address}</Typography>
-
-            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='h6'>Phone: {user.phone_number}</Typography>
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Phone: {user.phone_number}</Typography>
    
       <Divider></Divider>
  
@@ -232,14 +235,18 @@ export default function DisplayDetails( { role, user } ) {
 <Typography sx={{alignSelf:"flex-start", marginLeft:4, marginTop:3, fontFamily:'"Segoe UI"', color:"white"}} variant='h6'>{user.fname} {user.lname}'s Profile</Typography>
 
       <Paper sx={{display: "flex", flexDirection: "column", flexWrap:"nowrap", justifyContent: "center", alignItems:"flex-start",width:"90%",gap:2, marginTop: 3, height:"40vh", padding: 5 }}>
-
-{ role === "Student" &&
 <>
+{ role === "Student" &&
+
         <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>College: {user.college}</Typography>  
+}
         <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}}  variant='p'>Address: {user.address}</Typography> 
+
+        { role === "Student" &&
         <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Year of Study: {user.year_of_study}</Typography>
+}
          </>
-         }
+         
         <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Date of Birth: {user.date_of_birth}</Typography>
 
         <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Age: { Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10) }</Typography>
