@@ -235,7 +235,8 @@ export default function DisplayDetails( { role, user } ) {
 
 { role === "Student" &&
 <>
-        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>College: {user.college}</Typography>   
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>College: {user.college}</Typography>  
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}}  variant='p'>Address: {user.address}</Typography> 
         <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Year of Study: {user.year_of_study}</Typography>
          </>
          }
@@ -243,7 +244,7 @@ export default function DisplayDetails( { role, user } ) {
 
         <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Age: { Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10) }</Typography>
 
-        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}}  variant='p'>Address: {user.address}</Typography>
+     
 
         <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Phone: {user.phone_number}</Typography>
 

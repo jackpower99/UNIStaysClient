@@ -13,8 +13,6 @@ export default function AgreementCardsDisplay() {
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
     const fontSize = useResponsiveFontSize();
 
-    console.log(fontSize)
-
     const useStyles = makeStyles(theme => ({
         root: {
             display: "flex",
@@ -83,19 +81,19 @@ export default function AgreementCardsDisplay() {
 
         </Paper>
         <Paper elevation={23} className={isMobile? classes.mobCard : classes.card} sx={{ border: '6px solid #76dbf5', borderRadius: "30px"}}>
-        <Typography lassName={isMobile ? classes.mobCardContent : classes.cardContent} variant='h4' component='h4'>
+        <Typography className={isMobile ? classes.mobCardContent : classes.cardContent} variant='h4' component='h4'>
                 UNIBNB
             </Typography>
-            <Typography lassName={isMobile ? classes.mobCardContent : classes.cardContent}>
+            <Typography className={isMobile ? classes.mobCardContent : classes.cardContent}>
                 So your planning a visit to a friend in another college, but you need somewhere to stay that's not their leather couch. UNIStays gives landlords the chance to post their paccomodations as UNIBNB available. This gives students the opportunity to book accomodation for short stays.
             </Typography>
 
         </Paper>
         <Paper elevation={23} className={isMobile? classes.mobCard : classes.card} sx={{ border: '6px solid #4bbf75',borderRadius: "30px"}}>
-        <Typography lassName={isMobile ? classes.mobCardContent : classes.cardContent} variant='h4' component='h4'>
+        <Typography className={isMobile ? classes.mobCardContent : classes.cardContent} variant='h4' component='h4'>
                 Whole Semester
             </Typography>
-            <Typography lassName={isMobile ? classes.mobCardContent : classes.cardContent}>
+            <Typography className={isMobile ? classes.mobCardContent : classes.cardContent}>
                 Something your used to. Book or let accomodation for the whole semester. Of course we can't forget the traditional method. So if your timetables packed from Monday to Friday or you just can't wait to get away from your parents. A whole semester property is for you.
             </Typography>
 
