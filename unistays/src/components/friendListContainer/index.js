@@ -90,7 +90,7 @@ export default function FriendListContainer() {
     onError: (err) =>{
       console.log(err);
     },
-    refetchOnMount: "always"
+    enabled: role === "Student",
     }
   );
 
@@ -103,7 +103,7 @@ export default function FriendListContainer() {
     onError: (err) =>{
       console.log(err);
     },
-    refetchOnMount: "always"
+    enabled: role === "Student",
     }
   );
 
