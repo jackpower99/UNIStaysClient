@@ -17,6 +17,12 @@ const collegesIreland = ["Athlone Institute of Technology", "Carlow College"
 "Trinity College Dublin, University of Dublin", "University College Cork", "University College Dublin", "University of Limerick",
 "Waterford Institute of Technology"] 
 
+const countiesIreland = [ "Carlow", "Cavan", "Clare", "Cork", "Donegal", "Dublin", "Galway",
+ "Kerry", "Kildare", "Kilkenny", "Laois", 
+"Leitrim", "Limerick", "Longford", "Louth", "Mayo", "Meath", "Monaghan", "Offaly", "Roscommon", "Sligo", "Tipperary", 
+"Waterford", "Westmeath"
+, "Wicklow", "Wexford"]
+
 export default function FilterCard(props) {
 
     const { accomodations, filterAccomodationsCallBack } = props
@@ -74,23 +80,25 @@ export default function FilterCard(props) {
         setPropertyType(event.target.value);
       };
 
-    //   const handleUNIFlexChange = (event) => {
-    //     setUNIFlex(event.target.value);
-    //   };
-
-    //   const handleUNIBNBChange = (event) => {
-    //     setUNIBNB(event.target.value);
-    //   };
-
-    //   const handleWholeSemesterChange = (event) => {
-    //     setWholeSemester(event.target.value);
-    //   };
-
       const handleRadioChange =(e)=>{
           setValue(e.target.value)
           if(e.target.value === 'UNIFlex Available') setUNIFlex(true);
           if(e.target.value === 'UNIBNB Available') setUNIBNB(true);
           if(e.target.value === 'Whole Semester Available') setWholeSemester(true);
+      }
+
+      const clearFilters =()=>{
+        setCollege("")
+        setCounty("")
+        setBeds(0)
+        setBaths(0)
+        setPropertyType("")
+        setPriceMin(0)
+        setPriceMax(0)
+        setUNIFlex(false)
+        setUNIBNB(false)
+        setWholeSemester(false)
+        setValue("")
       }
 
       const filterAccomodations = (e) =>{
@@ -205,9 +213,14 @@ export default function FilterCard(props) {
           label="County"
           onChange={handleCountyChange}
         >
-          <MenuItem value={'Waterford'}>Waterford</MenuItem>
-          <MenuItem value={'Cork'}>Cork</MenuItem>
-          <MenuItem value={'Dublin'}>Dublin</MenuItem>
+           {countiesIreland.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+            >
+              {name}
+            </MenuItem>
+          ))}
         </Select>
       </FormControl>
     </Box>
@@ -314,6 +327,14 @@ export default function FilterCard(props) {
   variant="contained" 
   style={{backgroundColor: "#FE7E6D",  width: "6vw", color: "white", marginTop: "1vh", marginLeft: "3vw"}}>
       Search
+        </Button>
+
+        <Button 
+  onClick={clearFilters} 
+  type="submit"
+  variant="contained" 
+  style={{backgroundColor: "white",  width: "6vw", color: "#FE7E6D", marginTop: "1vh", marginLeft: "3vw"}}>
+      Clear
         </Button>
    </Paper>
   )

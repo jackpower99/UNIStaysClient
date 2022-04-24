@@ -13,6 +13,7 @@ import { uploadStudentProfilePicture, uploadLandlordProfilePicture } from '../..
 import prop from '../../resource/images/Portrait_Placeholder.png'
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
+import { useNavigate } from 'react-router-dom';
 
 export default function DisplayDetails( { role, user } ) {
 
@@ -22,6 +23,7 @@ export default function DisplayDetails( { role, user } ) {
   const [userImage, setUserImages] = React.useState([]);
   const [objURL, setObjURL] = React.useState("")
   const [token, setToken ] = React.useState(localStorage.getItem("token"))
+  const navigate = useNavigate()
 
 
   const theme = useTheme();
@@ -31,7 +33,10 @@ export default function DisplayDetails( { role, user } ) {
     e.preventDefault();
     setAttachFilesFlag(true);
   }
-  console.log(role)
+
+  console.log(userImage)
+  console.log(objURL)
+
 
   useQuery(
     ["uploadProfilePictureStudent", { 
@@ -43,6 +48,8 @@ export default function DisplayDetails( { role, user } ) {
     onSuccess: (data)=>{
       console.log(data);
       setUploadStudentProfilePictureFlag(false)
+      navigate(0)
+      
     },
     onError: (err) =>{
       console.log(err);
@@ -63,6 +70,7 @@ export default function DisplayDetails( { role, user } ) {
     onSuccess: (data)=>{
       console.log(data);
       setUploadLandlordProfilePictureFlag(false)
+      navigate(0)
     },
     onError: (err) =>{
       console.log(err);
@@ -86,7 +94,7 @@ export default function DisplayDetails( { role, user } ) {
     setUserImages(f);
     setObjURL(URL.createObjectURL(f[0]))
     setAttachFilesFlag(false);
-    if(user === "Student"){
+    if(role === "Student"){
        setUploadStudentProfilePictureFlag(true)
     }
     else{

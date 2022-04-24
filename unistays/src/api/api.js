@@ -365,6 +365,7 @@ export const getLandlordProperties = async (args) => {
         body: formData
     });
     const content = await response.json();
+    console.log(content)
     return content;
 }
 

@@ -103,6 +103,20 @@ export default function HomePageTemplatePage() {
             width: "40vw",
           
           },
+          btns:{
+            height: '8vh', 
+            width: '15vw',  
+            backgroundColor: "#FE7E6D", 
+            fontSize: 20,
+            ":hover": {backgroundColor: "#FE7E6D"}
+          },
+          btnsMob: {
+            height: '6vh', 
+            width: '45vw',  
+            backgroundColor: "#FE7E6D", 
+            fontSize: 20,
+            ":hover": {backgroundColor: "#FE7E6D"}
+          },
            accountButtons: {
             height: '8vh', 
             width: '15vw',  
@@ -139,18 +153,19 @@ export default function HomePageTemplatePage() {
     <img className={ isMobile ? classes.logoMob : classes.logo}  src={Logo} alt="logo"></img>
     </div>
     <div className = {classes.root}>
-    <Paper elevation={0} className={classes.createAccountContainer}>
+    <Paper sx={{marginBottom:10}} elevation={0} className={classes.createAccountContainer}>
       <Grid container spacing={1}>
       { !token &&
         <>
-      <Grid sx={{ display: "flex", justifyContent: "center" }} item xs={6}>
+      <Grid sx={{ display: "flex", justifyContent: "center", flexWrap: "wrap" }} item xs={isMobile? 12 : 6}>
    
-    <Button onClick={handleStudentSignUpButtonClicked} sx={{ height: '8vh', width: '15vw',  backgroundColor: "#FE7E6D", fontSize: 20, ":hover": {backgroundColor: "#FE7E6D"}}} type="submit" variant="contained" color="primary">
+    <Button sx={{ backgroundColor: "#FE7E6D", color: "white", ":hover": {backgroundColor: "#FE7E6D"} }} onClick={handleStudentSignUpButtonClicked} className={isMobile? classes.btnsMob : classes.btns} type="submit" variant="contained" color="primary">
           Student Account
         </Button>
         </Grid>
-        <Grid sx={{ display: "flex", justifyContent: "center" }}  item xs={6}>
-      <Button onClick={handleLandlordSignUpButtonClicked} sx={{ height: '8vh', width: '15vw', backgroundColor: "white", color: '#FE7E6D', fontSize: 20, ":hover": {backgroundColor: "white"}}} type="submit" variant="contained" color="secondary">
+        <Grid sx={{ display: "flex", justifyContent: "center" }}  item xs={isMobile? 12: 6}>
+      <Button sx={{ backgroundColor: "white", color: "#FE7E6D",
+            ":hover": {backgroundColor: "white"} }} onClick={handleLandlordSignUpButtonClicked} className={isMobile? classes.btnsMob : classes.btns} type="submit" variant="contained" color="secondary">
         Landlord Account
       </Button>
   

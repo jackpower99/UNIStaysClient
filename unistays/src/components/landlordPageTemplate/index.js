@@ -8,8 +8,11 @@ import PostVacancy from '../postVacancy';
 import { getLandlordProperties } from '../../api/api';
 import DisplayProperties from '../displayProperties';
 import {deleteAccomodation, getStudentDetails, getStudentBookings} from '../../api/api.js'
+import { useNavigate } from 'react-router-dom';
 
 export default function LandlordPageTemplate() {
+
+  const navigate = useNavigate()
 
  const [emailLS, setEmail ] = useState(JSON.parse(localStorage.getItem("userEmail")))
  const [role, setRole ] = useState(JSON.parse(localStorage.getItem("userRole")))
@@ -110,8 +113,8 @@ useQuery(
 ["delete accomodation", {id: accomodationDeleted._id, token: token}],
 deleteAccomodation,{
 onSuccess: (data)=>{
-    setLandlordProperties(data.accomodations)
     setRunQueryFlag(false)
+    navigate(0)
 },
 onError: (err) =>{
   console.log(err);

@@ -34,6 +34,12 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
+const countiesIreland = [ "Carlow", "Cavan", "Clare", "Cork", "Donegal", "Dublin", "Galway",
+ "Kerry", "Kildare", "Kilkenny", "Laois", 
+"Leitrim", "Limerick", "Longford", "Louth", "Mayo", "Meath", "Monaghan", "Offaly", "Roscommon", "Sligo", "Tipperary", 
+"Waterford", "Westmeath"
+, "Wicklow", "Wexford"]
+
 
 const collegesIreland = ["Athlone Institute of Technology", "Carlow College"
 ,"Cork Institute of Technology","Dublin City University",
@@ -291,14 +297,10 @@ export default function PostVacancy() {
         }
      
       };
-    
-      const handleClose = () => {
-        setOpen(false);
-      };
 
-      //TODO validation !!!
       const handleSubmit =  async () => {
-        if(zip && address && date){
+        if(zip !== "" && address !== "" && date){
+          console.log(1111)
           setSubmitFlag(true);
         }
       }
@@ -407,11 +409,15 @@ export default function PostVacancy() {
                     label="County"
                     onChange={handleCountyChange}
                 >
-                    <MenuItem value={"Waterford"}>Waterford</MenuItem>
-                    <MenuItem value={"Cork"}>Cork</MenuItem>
-                    <MenuItem value={"Dublin"}>Dublin</MenuItem>
-                    {/* <MenuItem value={"Single Room"}>Single Room</MenuItem>
-                    <MenuItem value={"Double Room"}>Double Room</MenuItem> */}
+                    {countiesIreland.map((name) => (
+            <MenuItem
+              key={name}
+              value={name}
+             // style={getStyles(name, name, theme)}
+            >
+              {name}
+            </MenuItem>
+          ))}
                 </Select>
                 </FormControl>
     <FormControl>

@@ -122,7 +122,7 @@ export default function FriendListContainer() {
     onSuccess: (data)=>{
         console.log(data)
         setRunQueryFlag(false)
-        navigate(0)
+        //navigate(0)
     },
     onError: (err) =>{
       console.log(err);
