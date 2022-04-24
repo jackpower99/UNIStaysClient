@@ -33,6 +33,7 @@ function MapGoogle(props){
     const [friendsIds, setFriendsIds] = React.useState([])
     const [friendsCurrentLocationIds, setFriendsCurrentLocationIds] = React.useState([])
     const email = JSON.parse(localStorage.getItem("userEmail"));
+    const role = JSON.parse(localStorage.getItem("userRole"));
     const [isLoading, setLoading] = React.useState(true);
     const [token, setToken ] = React.useState(localStorage.getItem("token"))
 
@@ -64,9 +65,8 @@ function MapGoogle(props){
         onError: (err) =>{
           console.log(err);
         },
-        refetchOnMount: "always",
+        enabled: role === "Student",
         cacheTime: 0,
-        retry: 2
         }
       );
 
