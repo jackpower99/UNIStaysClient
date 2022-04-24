@@ -5,7 +5,7 @@ export const register = async (args) => {
         password: args.queryKey[1].password,
         role: args.queryKey[1].role 
     };
-    const response = await fetch("/api/users/?action=register",{
+    const response = await fetch("https://unistaysherokuserver.herokuapp.com/api/users/?action=register",{
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -18,7 +18,7 @@ export const register = async (args) => {
 }
 
 export const getRefreshToken = async () => {
-    const response = await fetch("/api/users/refresh",{
+    const response = await fetch("https://unistaysherokuserver.herokuapp.com/api/users/refresh",{
         method: "GET",
     });
     const content = await response.json();
@@ -30,7 +30,7 @@ export const login = async (args) => {
         email: args.queryKey[1].email,
         password: args.queryKey[1].password,
     };
-    const response = await fetch("/api/users",{
+    const response = await fetch("https://unistaysherokuserver.herokuapp.com/api/users",{
         method: "POST",
         headers: {
             'Content-Type': 'application/json',
@@ -61,7 +61,7 @@ export const studentDetails = async (args) => {
        formData.append("documents", file);
    }))
 
-    const response = await fetch("/api/students",{
+    const response = await fetch("https://unistaysherokuserver.herokuapp.com/api/students",{
         method: "POST",
         headers: {
             "Accepts":"application/json"
@@ -76,7 +76,7 @@ export const getStudentDetails = async (args) => {
     const email = args.queryKey[1].email
     const token = args.queryKey[1].token
     
-    const response = await fetch(`/api/students/${email}`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/students/${email}`,{
         method: "GET",
         headers: {
         'Authorization': token,
@@ -92,7 +92,7 @@ export const getStudentDetails = async (args) => {
     const email = args.queryKey[1].email
     const token = args.queryKey[1].token
 
-    const response = await fetch(`/api/landlords/${email}`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/landlords/${email}`,{
         method: "GET",
         headers: {
         'Authorization': token,
@@ -120,7 +120,7 @@ export const landlordDetails = async (args) => {
         formData.append("documents", file);
     }))
  
-     const response = await fetch("/api/landlords",{
+     const response = await fetch("https://unistaysherokuserver.herokuapp.com/api/landlords",{
          method: "POST",
          headers: {
              "Accepts":"application/json"
@@ -168,7 +168,7 @@ export const postAccomodation = async (args) => {
         console.log(value);
      }
 
-    const response = await fetch("/api/accomodations",{
+    const response = await fetch("https://unistaysherokuserver.herokuapp.com/api/accomodations",{
         method: "POST",
         headers: {
             'Authorization': token,
@@ -202,7 +202,7 @@ export const getAccomodations = async (args) => {
     const token = args.queryKey[1].token
     var id = args.queryKey[1].idClicked
 
-    const response = await fetch(`/api/accomodations/${id}`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/accomodations/${id}`,{
         method: "GET",
         headers: {
         'Authorization': token,
@@ -230,7 +230,7 @@ export const getAccomodations = async (args) => {
         flexi_days: args.queryKey[1].flexiDays,
         booked_dates: args.queryKey[1].bookedDates,
     };
-    const response = await fetch(`/api/accomodations/${id}?action=${postingType}`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/accomodations/${id}?action=${postingType}`,{
         method: "POST",
         headers: {
             'Authorization': token,
@@ -249,7 +249,7 @@ export const getLandlordProperties = async (args) => {
     var id = args.queryKey[1].id;
     const token = args.queryKey[1].token
 
-    const response = await fetch(`/api/accomodations/landlord/${id}`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/accomodations/landlord/${id}`,{
         method: "GET",
         headers: {
         'Authorization': token,
@@ -267,7 +267,7 @@ export const getLandlordProperties = async (args) => {
     var id = args.queryKey[1].id;
     const token = args.queryKey[1].token
 
-    const response = await fetch(`/api/accomodations/${id}?action=delete`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/accomodations/${id}?action=delete`,{
         method: "POST",
         headers: {
         'Authorization': token,
@@ -282,7 +282,7 @@ export const getLandlordProperties = async (args) => {
 
  export const getStudents = async (args) => {
     const token = args.queryKey[1].token
-    const response = await fetch(`/api/students`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/students`,{
         method: "GET",
         headers: {
         'Authorization': token,
@@ -298,7 +298,7 @@ export const getLandlordProperties = async (args) => {
  export const getFriends = async (args) => {
     const student_email = args.queryKey[1].email
     const token = args.queryKey[1].token
-    const response = await fetch(`/api/students/${student_email}/friends`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/students/${student_email}/friends`,{
         method: "GET",
         headers: {
         'Authorization': token,
@@ -319,7 +319,7 @@ export const getLandlordProperties = async (args) => {
     const params = {
         friends_id: friends_id 
     }
-    const response = await fetch(`/api/students/${student_email}/friends`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/students/${student_email}/friends`,{
         method: "POST",
         headers: {
         'Authorization': token,
@@ -345,7 +345,7 @@ export const getLandlordProperties = async (args) => {
         formData.append("documents", file);
     }))
 
-    const response = await fetch(`/api/students/${student_email}/profile-picture`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/students/${student_email}/profile-picture`,{
         method: "POST",
         headers: {
             'Authorization': token,
@@ -370,7 +370,7 @@ export const uploadLandlordProfilePicture = async (args) => {
         formData.append("documents", file);
     }))
 
-    const response = await fetch(`/api/landlords/${email}/profile-picture`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/landlords/${email}/profile-picture`,{
         method: "POST",
         headers: {
             'Authorization': token,
@@ -385,7 +385,7 @@ export const uploadLandlordProfilePicture = async (args) => {
 export const getFriendsLocations = async (args) => {
     const ids = args.queryKey[1].friendsIds
     const token = args.queryKey[1].token
-    const response = await fetch(`/api/accomodations/friends-locations`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/accomodations/friends-locations`,{
         method: "POST",
         headers: {
         'Authorization': token,
@@ -403,7 +403,7 @@ export const getFriendsLocations = async (args) => {
  export const getStudentBookings = async (args) => {
     const student_id = args.queryKey[1].id
     const token = args.queryKey[1].token
-    const response = await fetch(`/api/accomodations/student-bookings/${student_id}`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/accomodations/student-bookings/${student_id}`,{
         method: "GET",
         headers: {
         'Authorization': token,
@@ -417,7 +417,7 @@ export const getFriendsLocations = async (args) => {
  }
 
  export const getAccomodationReviews = async (id) => {
-    const response = await fetch(`/api/accomodations/accomodation-reviews/${id}`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/accomodations/accomodation-reviews/${id}`,{
         method: "GET",
         headers: {
         'Content-Type': 'application/json',
@@ -441,7 +441,7 @@ export const getFriendsLocations = async (args) => {
         student_name: student_name,
         review: review
      }
-    const response = await fetch(`/api/accomodations/accomodation-reviews/${acc_id}`,{
+    const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/accomodations/accomodation-reviews/${acc_id}`,{
         method: "POST",
         headers: { 
         'Authorization': token,
