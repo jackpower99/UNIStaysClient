@@ -75,7 +75,7 @@ const SplitForm = (props) => {
                 amount: parseFloat(price) * 100,
                 id: id
             }
-            const response = await fetch("/api/payment",{
+            const response = await fetch("https://unistaysherokuserver.herokuapp.com/api/payment",{
                 method: "POST",
                 headers: {
                   'Authorization': token,
