@@ -60,7 +60,6 @@ export default function LandlordPageTemplate() {
   onError: (err) =>{
       console.log(err);
   },
-  refetchOnMount: "always",
   }
 );
 
@@ -75,8 +74,6 @@ useQuery(
   onError: (err) =>{
       console.log(err);
   },
-  refetchOnMount: "always",
-
   }
 );
 
