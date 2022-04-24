@@ -27,8 +27,13 @@ import { postAccomodationReview } from "../../api/api";
 import prop from '../../resource/images/prop.jpg'
 import { useNavigate } from "react-router-dom";
 
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
+
 const useStyles = makeStyles((theme)=>({
   card: { width: "20vw", height: "60vh",  backgroundColor: "#f2c8c2", color:"white"},
+  mobCard: { width: "90%", height: "60vh",  backgroundColor: "#f2c8c2", color:"white"},
+
   media: { height: 300 },
   avatar: {
     backgroundColor: "rgb(255, 0, 0)",
@@ -54,6 +59,9 @@ export default function AccomodationCard({ accomodation, action }) {
   const [token, setToken ] = React.useState(localStorage.getItem("token"))
 
   const navigate = useNavigate()
+
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [open, setOpen] = React.useState(false);
 
@@ -98,7 +106,7 @@ useQuery(
 console.log(studentBooking)
 
   return (
-    <Card className={classes.card}>
+    <Card className={isMobile? classes.mobCard : classes.card}>
          <CardHeader
       className={classes.header}
       title={

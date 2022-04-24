@@ -8,6 +8,8 @@ import Tabs from '@mui/material/Tabs';
 import Tab from '@mui/material/Tab';
 import { getFriends, addFriend } from '../../api/api';
 import { useNavigate } from 'react-router-dom';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
 
 export default function FriendListContainer() {
 
@@ -24,6 +26,17 @@ export default function FriendListContainer() {
             gap: 10,
 
        },
+       mobRoot:{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        //justifyContent: "center",
+        width: "70vw",
+        height: "85vh",
+        // backgroundColor: "",
+        marginTop: '2vh',
+        gap: 10,
+       },
 
        listStyles: {
             display: "flex",
@@ -32,11 +45,22 @@ export default function FriendListContainer() {
            height: "70vh",
            width: "25vw",
            overflowY: 'scroll',
-       }
+       },
+       mobListStyles: {
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+       height: "70vh",
+       width: "90%",
+       overflowY: 'scroll',
+   }
    }));
 
   const classes = useStyles();
 
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const [searchInput, setSearchInput] = React.useState('')
   const [students, setStudents] = React.useState([])
@@ -125,7 +149,7 @@ export default function FriendListContainer() {
         .filter(student => student.student_email !== email)
 
         for(var i =0; i < studentsNotMe.length; i++){
-          if(friends.find(f => f._id === studentsNotMe[i]._id) === undefined){
+          if(friends?.find(f => f._id === studentsNotMe[i]._id) === undefined){
             temp = [...temp, studentsNotMe[i]]
           }
           console.log(temp)
@@ -139,7 +163,7 @@ export default function FriendListContainer() {
 
 
   return (
-      <Paper elevation={20} sx={{ backgroundColor: "#f2c8c2", borderRadius:"10px"}} className={classes.root}>
+      <Paper elevation={20} sx={{ backgroundColor: "#f2c8c2", borderRadius:"10px"}} className={isMobile? classes.mobRoot : classes.root}>
       <Tabs
       TabIndicatorProps={{style: {background:'white', color:"white"}}}
        value={value}
@@ -161,7 +185,7 @@ export default function FriendListContainer() {
             value={searchInput}
             onChange={e => setSearchInput(e.target.value)}/>
 
-           <Paper  sx={{ backgroundColor: "#f2c8c2"}} elevation={0} className={classes.listStyles}>
+           <Paper  sx={{ backgroundColor: "#f2c8c2"}} elevation={0} className={isMobile? classes.mobListStyles : classes.listStyles}>
             <FriendList type={value} students={ sortStudentsForListView(students) } action={action} searchInput={searchInput}/>
             </Paper>
 

@@ -68,9 +68,6 @@ const NavBar = () => {
           <Typography variant="h4" className={classes.title}>
             UNIStays
           </Typography>
-          <Typography variant="h6" className={classes.title}>
-            Home of student accomodation
-          </Typography>
             {isMobile ? (
               <>
                 <IconButton

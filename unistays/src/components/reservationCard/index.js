@@ -317,9 +317,9 @@ const handleClose = () => {
         }}
         renderInput={(startProps, endProps) => (
           <React.Fragment>
-            <TextField {...startProps}   sx={{width:"7vw"}} />
+            <TextField {...startProps} />
             <Box sx={{ mx: 2 }}> to </Box>
-            <TextField {...endProps}   sx={{width:"7vw"}} />
+            <TextField {...endProps}  />
           </React.Fragment>
         )}
       />

@@ -11,6 +11,8 @@ import FriendListContainer from '../friendListContainer';
 import temp from '../../resource/images/landingJPG.jpg'
 import { uploadStudentProfilePicture, uploadLandlordProfilePicture } from '../../api/api';
 import prop from '../../resource/images/Portrait_Placeholder.png'
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
 
 export default function DisplayDetails( { role, user } ) {
 
@@ -22,6 +24,8 @@ export default function DisplayDetails( { role, user } ) {
   const [token, setToken ] = React.useState(localStorage.getItem("token"))
 
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleAttachFiles = e => {
     e.preventDefault();
@@ -103,12 +107,24 @@ export default function DisplayDetails( { role, user } ) {
       },
       typography:{
         fontSize: "15px"
+      },
+      mobRoot:{
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: "2vh",
+        gap: 10,
+        minHeight: "85vh",
+        width: "70vw",
       }
   }));
 
   const classes = useStyles();
 
   return (
+<>
+{ !isMobile && 
 
  <div style={{display: "flex", flexDirection:"row", justifyContent: "center", alignItems:"center", flexWrap:"nowrap", gap:40, marginTop:20 }}> 
 
@@ -185,7 +201,86 @@ export default function DisplayDetails( { role, user } ) {
 
 }
 </div>
+}
 
 
+{ isMobile && 
+<div style={{display: "flex", flexDirection:"column", justifyContent: "center", alignItems:"center", flexWrap:"nowrap", gap:20, marginTop:20 }}> 
+
+<Paper elevation={20} sx={{ backgroundColor: "#f2c8c2", borderRadius: "10px"}}className={classes.mobRoot}>
+  <Box
+            component="img"
+            sx={{
+              height: "25vh",
+              width: '40vw',
+              marginTop: 1,
+              alignSelf: 'center',
+              marginLeft: "20px",
+              border: '5px solid white',
+              borderRadius: "10px",
+              overflow: 'none',
+            }}
+            src={ user.profile_picture  ? `data:${user.profile_picture?.type};base64,${Buffer.from(user.profile_picture?.data).toString('base64')}` : userImage[0] ? objURL: prop}
+            alt={user.profile_picture?.name}
+            onClick={handleAttachFiles}
+          />
+      
+
+    <DropzoneDialog 
+    dialogTitle={"Select a profile image!"}
+    open={attachFilesFlag}
+    onClose={() => setAttachFilesFlag(false)}
+    onSave={(files) => handleSave(files)}
+    showPreviews={true}
+    maxFileSize={5000000}
+    />
+
+<Typography sx={{alignSelf:"flex-start", marginLeft:4, marginTop:3, fontFamily:'"Segoe UI"', color:"white"}} variant='h6'>{user.fname} {user.lname}'s Profile</Typography>
+
+      <Paper sx={{display: "flex", flexDirection: "column", flexWrap:"nowrap", justifyContent: "center", alignItems:"flex-start",width:"90%",gap:2, marginTop: 3, height:"40vh", padding: 5 }}>
+
+{ role === "Student" &&
+<>
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>College: {user.college}</Typography>   
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Year of Study: {user.year_of_study}</Typography>
+         </>
+         }
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Date of Birth: {user.date_of_birth}</Typography>
+
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Age: { Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10) }</Typography>
+
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}}  variant='p'>Address: {user.address}</Typography>
+
+        <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Phone: {user.phone_number}</Typography>
+
+  <Divider></Divider>
+
+  </Paper>
+
+
+  <Paper sx={{display: "flex", flexDirection: "column", flexWrap:"wrap", justifyContent:"center", alignItems:"center",width:"90%",gap:2, marginTop: 3, maxHeight:"90vh", padding: 3 }}>
+
+  <Typography variant='h5'>Documents</Typography>
+
+  { user.documents?.length > 0 &&
+
+    <div style={{display: "flex", flexDirection: "row", flexWrap:"wrap", justifyContent:"center", alignItems:"center",width:"35vw",gap:4, marginTop: 3, maxHeight:"50vh", padding: 5 }}>
+    { user?.documents?.map((doc, key) => (
+      <iFrame style={{height: "20vh"}} key={key} src={`data:${doc?.type};base64,${Buffer.from(doc?.data).toString('base64')}`} />
+    ))
+  }
+  
+    </div>
+}
+</Paper>
+</Paper>
+ 
+        { role ==="Student" && 
+        <FriendListContainer />
+
+}
+</div>
+}
+</>
   )
 }

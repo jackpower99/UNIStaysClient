@@ -16,10 +16,15 @@ import { useTheme } from '@mui/material/styles';
 import { Fab, Drawer } from '@mui/material';
 import NavigationIcon from "@material-ui/icons/Navigation";
 import AccomodationReviews from '../accomodationReviews';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
 
 const AutoPlaySwipeableViews = autoPlay(SwipeableViews);
 
 export default function AccomodationPropertyDetails(props) {
+
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
 
   const role = JSON.parse(localStorage.getItem("userRole"));
@@ -40,7 +45,15 @@ export default function AccomodationPropertyDetails(props) {
             margin: 2,
             padding: 2,
            // width: "20vw",
-        }
+        },
+        isMobilePic: {
+          width: "95vw"
+        },
+      pic:{
+        maxWidth: "32vw", 
+        flexGrow: 1 
+      }
+
     //     chip: {
     //       margin: theme.spacing(0.5),
     //     },
@@ -50,7 +63,6 @@ export default function AccomodationPropertyDetails(props) {
     //     // }
     }))
 
-    const theme = useTheme();
     const { accomodationClicked, accomodationTypeClicked } = props;
     const [activeStep, setActiveStep] = React.useState(0);
     const [maxSteps, setMaxSteps] = React.useState(0);
@@ -83,7 +95,7 @@ export default function AccomodationPropertyDetails(props) {
 
   return (
     <>
-<Box sx={{ maxWidth: "32vw", flexGrow: 1 }}>
+<Box className={isMobile? classes.isMobilePic : classes.pic}>
       <AutoPlaySwipeableViews
         axis={accomodationClicked.property_images.direction === 'rtl' ? 'x-reverse' : 'x'}
         index={activeStep}
@@ -100,7 +112,7 @@ export default function AccomodationPropertyDetails(props) {
                   display: 'block',
                 //   marginLeft: "auto",
                 //   marginRight: "auto",
-                  maxWidth: "40vw",
+                //  maxWidth: "40vw",
                   overflow: 'hidden',
                   width: '100%',
                 }}

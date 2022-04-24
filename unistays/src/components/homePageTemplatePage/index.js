@@ -14,6 +14,8 @@ import { alpha } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AgreementCardsDisplay from '../agreementCardsDisplay';
 import FilterCard from '../filterCard';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
 
 export default function HomePageTemplatePage() {
     const mapContainerStyle = {
@@ -21,6 +23,9 @@ export default function HomePageTemplatePage() {
       };
 
       const navigate = useNavigate();
+
+      const theme = useTheme();
+      const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
       const [accomodations, setAccomodations] = React.useState([])
       const [accomodationClicked, setAccomodationClicked] = React.useState({});
@@ -85,6 +90,11 @@ export default function HomePageTemplatePage() {
             // width: "55vw",
             // height: "45vh",
           },
+          logoMob:{
+            position: "relative",
+            width: "95vw",
+           height: "40vh",
+          },
           createAccount: {
             position: "relative",
             width: "40vw",
@@ -126,7 +136,7 @@ export default function HomePageTemplatePage() {
     <Paper elevation={0}>
     <Paper elevation={1} className={classes.paperContainer}>
       <div className = {classes.root}>
-    <img className={classes.logo}  src={Logo} alt="logo"></img>
+    <img className={ isMobile ? classes.logoMob : classes.logo}  src={Logo} alt="logo"></img>
     </div>
     <div className = {classes.root}>
     <Paper elevation={0} className={classes.createAccountContainer}>
@@ -167,7 +177,7 @@ export default function HomePageTemplatePage() {
         }
       })
       } 
-     sx={{ height: '7vh', width: '10vw', backgroundColor: "#FE7E6D", color: 'white', fontSize: 15, marginTop: 2, marginBottom:1, ":hover": {backgroundColor: "#FE7E6D"}}} 
+     sx={{ height: '10vh', width: '28vw', backgroundColor: "#FE7E6D", color: 'white', fontSize: 15, marginTop: 2, marginBottom:1, ":hover": {backgroundColor: "#FE7E6D"}}} 
      type="submit" 
      variant="contained"
      >
@@ -181,10 +191,10 @@ export default function HomePageTemplatePage() {
 
     
     <Grid container spacing={3}>
-    <Grid item xs={6}>
+    <Grid item xs={isMobile ? 12 : 6}>
   <Map mapStyle={mapContainerStyle} accomodations={accomodations} clickedAccomodationCallbackFunction={clickedAccomodationCallbackFunction}/>
   </Grid>
-  <Grid item xs={6}>
+  <Grid item xs={isMobile ? 12 : 6}>
 
 {
  accomodationClicked !== null && accomodationClicked !== undefined && Object.getOwnPropertyNames(accomodationClicked).length !== 0 && 

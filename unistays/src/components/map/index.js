@@ -65,7 +65,8 @@ function MapGoogle(props){
           console.log(err);
         },
         refetchOnMount: "always",
-        cacheTime: 0
+        cacheTime: 0,
+        retry: 2
         }
       );
 
@@ -82,7 +83,8 @@ function MapGoogle(props){
           setLoading(false);
         },
           enabled: friendsIds.length > 0,
-          cacheTime: 0
+          cacheTime: 0,
+          retry: 2
         }
       );
 
@@ -94,10 +96,6 @@ function MapGoogle(props){
         setIdClicked(id);
         setGetPropertyDetailsFlag(true)
     }
-
-    // const mapIcon = (acc)=>{
-    //   if(friendsCurrentLocationIds)
-    // }
 
     return( 
     <GoogleMap zoom={7.4} center={center} mapContainerStyle={mapStyle} >

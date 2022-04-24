@@ -20,6 +20,8 @@ import PersonAddTwoToneIcon from '@mui/icons-material/PersonAddTwoTone';
 import { flexbox } from "@mui/system";
 import { uploadStudentProfilePicture } from '../../api/api';
 import temp from '../../resource/images/landingJPG.jpg'
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
 
 const useStyles = makeStyles({
   card: { 
@@ -29,6 +31,14 @@ const useStyles = makeStyles({
     width: "20vw", 
     height: "23vh", 
     marginBottom: 10},
+    mobCard:{
+      display: "flex",
+      flexDirection: "column",
+      gap: 2,
+      width: "90%", 
+      height: "23vh", 
+      marginBottom: 10
+    },
   media: { height: 200 },
   avatar: {
     backgroundColor: "rgb(255, 0, 0)",
@@ -38,14 +48,16 @@ const useStyles = makeStyles({
 export default function StudentCard({ student, action, type }) {
   const classes = useStyles();
 
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
   return (
-    <Card className={classes.card}>
+    <Card className={isMobile? classes.mobCard : classes.card}>
          <Box
                 component="img"
                 sx={{
                   height: "7vh",
-                  width: '5vw',
+                  width: '25%',
                   marginTop: 1,
                   alignSelf: 'center',
                   border: '1px solid white',

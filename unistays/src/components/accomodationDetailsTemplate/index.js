@@ -2,8 +2,14 @@ import React from 'react'
 import { Container, makeStyles, Grid } from '@material-ui/core';
 import AccomodationPropertyDetails from '../accomodationPropertyDetails';
 import ReservationCard from '../reservationCard';
+import useMediaQuery from "@material-ui/core/useMediaQuery";
+import { useTheme } from "@material-ui/core/styles";
 
 function AccomodationDetailsTemplate(props) {
+
+  
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
     const  { accomodationClicked } = props
 
@@ -33,10 +39,10 @@ const accomodationTypeClicked = (type) =>{
   return (
  
         <Grid container spacing={1}>
-        <Grid item xs={7}>
+        <Grid item xs={isMobile? 12 : 7}>
           <AccomodationPropertyDetails accomodationClicked ={accomodationClicked} accomodationTypeClicked={accomodationTypeClicked}></AccomodationPropertyDetails>
           </Grid>
-          <Grid item xs={5}>
+          <Grid item xs={isMobile? 12: 5}>
             <ReservationCard postingType={accTypeClicked} price={accomodationClicked.price_per_month}
              startDate={accomodationClicked.available_start}
              endDate={accomodationClicked.available_end}
