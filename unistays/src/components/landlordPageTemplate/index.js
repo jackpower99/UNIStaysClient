@@ -60,6 +60,7 @@ export default function LandlordPageTemplate() {
   onError: (err) =>{
       console.log(err);
   },
+  enabled: role === "Landlord",
   }
 );
 
@@ -74,6 +75,7 @@ useQuery(
   onError: (err) =>{
       console.log(err);
   },
+  enabled: role === "Student",
   }
 );
 
@@ -130,7 +132,7 @@ useQuery(
   onError: (err) =>{
       console.log(err);
   },
-  refetchOnMount: "always",
+  enabled: role === "Student",
   }
 );
 
