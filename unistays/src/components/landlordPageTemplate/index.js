@@ -96,7 +96,7 @@ useQuery(
   onError: (err) =>{
       console.log(err);
   },
-  enabled: landlordId !== "" || menuChangeRnQueryFlag === true,
+  enabled: role === "Landlord",
   cacheTime: 0,
   }
 );
