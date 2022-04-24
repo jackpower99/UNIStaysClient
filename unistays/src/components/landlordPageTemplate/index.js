@@ -95,7 +95,7 @@ useQuery(
   onError: (err) =>{
       console.log(err);
   },
-  enabled: role === "Landlord",
+  enabled: role === "Landlord" && landlordId !== "",
   cacheTime: 0,
   }
 );
