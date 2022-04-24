@@ -60,7 +60,7 @@ export default function LandlordPageTemplate() {
   onError: (err) =>{
       console.log(err);
   },
-  enabled: role === "Landlord",
+  refetchOnMount: role === "Landlord",
   }
 );
 
@@ -75,7 +75,7 @@ useQuery(
   onError: (err) =>{
       console.log(err);
   },
-  enabled: role === "Student",
+  refetchOnMount: role === "Student",
   }
 );
 
@@ -95,6 +95,7 @@ useQuery(
   onError: (err) =>{
       console.log(err);
   },
+  refetchOnMount: role === "Landlord",
   enabled: role === "Landlord" && landlordId !== "",
   cacheTime: 0,
   }
@@ -132,7 +133,7 @@ useQuery(
   onError: (err) =>{
       console.log(err);
   },
-  enabled: role === "Student",
+  refetchOnMount: role === "Student",
   }
 );
 
