@@ -66,6 +66,7 @@ function MapGoogle(props){
           console.log(err);
         },
         enabled: role === "Student",
+        refetchOnMount: role === "Student",
         cacheTime: 0,
         }
       );
