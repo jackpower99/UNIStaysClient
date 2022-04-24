@@ -61,6 +61,7 @@ export default function LandlordPageTemplate() {
       console.log(err);
   },
   refetchOnMount: role === "Landlord",
+  cacheTime: 0
   }
 );
 
@@ -76,6 +77,7 @@ useQuery(
       console.log(err);
   },
   refetchOnMount: role === "Student",
+  cacheTime: 0
   }
 );
 
@@ -134,6 +136,7 @@ useQuery(
       console.log(err);
   },
   refetchOnMount: role === "Student",
+  cacheTime: 0
   }
 );
 

@@ -91,6 +91,7 @@ export default function FriendListContainer() {
       console.log(err);
     },
     refetchOnMount: role === "Student",
+    cacheTime: 0
     }
   );
 
@@ -104,6 +105,7 @@ export default function FriendListContainer() {
       console.log(err);
     },
     refetchOnMount: role === "Student",
+    cacheTime: 0
     }
   );
 
