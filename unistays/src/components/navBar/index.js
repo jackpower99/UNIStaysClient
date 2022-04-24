@@ -37,7 +37,6 @@ const NavBar = () => {
   ];
 
   function editMenuOptions(){
-    //TODO
     if(localStorage.getItem("token")){
     var menuOpt = menuOptions.filter(opt=> opt.label !== "Login")
     return menuOpt;

@@ -13,26 +13,14 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import {DropzoneDialog} from 'material-ui-dropzone'
 import { AttachFile, Delete } from '@mui/icons-material';
 import { Button } from '@mui/material';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Slide from '@mui/material/Slide';
 import VacancyPriceSection from '../vacancyPriceSection';
 import {useQuery} from "react-query";
-import { typography } from '@mui/system';
 import { postAccomodation } from '../../api/api';
 import { useNavigate } from 'react-router-dom';
-
 import moment from 'moment';
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 const countiesIreland = [ "Carlow", "Cavan", "Clare", "Cork", "Donegal", "Dublin", "Galway",
  "Kerry", "Kildare", "Kilkenny", "Laois", 
@@ -66,7 +54,6 @@ export default function PostVacancy() {
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
-    const [open, setOpen] = React.useState(false);
 
     const navigate = useNavigate()
 
@@ -287,7 +274,6 @@ export default function PostVacancy() {
       }
 
       const handleClickOpen = () => {
-          //Todo: Validation
         if(!disableFormControlsForEdit){
           setDisableFormControlsForEdit(true);
           setVacancyPriceSectionVisibleFlag(true);
@@ -327,8 +313,6 @@ export default function PostVacancy() {
       return content;
       }
 
-      console.log(lat)
-      console.log(lng)
   return (
     <div style={{display: "flex", flexDirection:"column"}}>
 
@@ -346,8 +330,6 @@ export default function PostVacancy() {
                     <MenuItem value={"Apartment"}>Apartment</MenuItem>
                     <MenuItem value={"House"}>House</MenuItem>
                     <MenuItem value={"Townhouse"}>Townhouse</MenuItem>
-                    {/* <MenuItem value={"Single Room"}>Single Room</MenuItem>
-                    <MenuItem value={"Double Room"}>Double Room</MenuItem> */}
                 </Select>
                 </FormControl>
 
@@ -413,7 +395,6 @@ export default function PostVacancy() {
             <MenuItem
               key={name}
               value={name}
-             // style={getStyles(name, name, theme)}
             >
               {name}
             </MenuItem>

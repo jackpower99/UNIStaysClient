@@ -1,14 +1,10 @@
 import React from 'react';
-import { useState } from 'react';
 import { useQuery } from 'react-query';
-import { getLandlordDetails } from '../../api/api';
-import { Paper, Typography, Box, Grid, Divider } from '@mui/material';
+import { Paper, Typography, Box, Divider } from '@mui/material';
 import { Buffer } from 'buffer';
 import {DropzoneDialog} from 'material-ui-dropzone'
-import { AttachFile, Delet } from '@mui/icons-material';
 import { makeStyles } from '@material-ui/core';
 import FriendListContainer from '../friendListContainer';
-import temp from '../../resource/images/landingJPG.jpg'
 import { uploadStudentProfilePicture, uploadLandlordProfilePicture } from '../../api/api';
 import prop from '../../resource/images/Portrait_Placeholder.png'
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -33,10 +29,6 @@ export default function DisplayDetails( { role, user } ) {
     e.preventDefault();
     setAttachFilesFlag(true);
   }
-
-  console.log(userImage)
-  console.log(objURL)
-
 
   useQuery(
     ["uploadProfilePictureStudent", { 
@@ -80,12 +72,6 @@ export default function DisplayDetails( { role, user } ) {
       cacheTime: 10000
     }
   );
-
-
-  const clearFiles = e =>{
-    e.preventDefault();
-    setUserImages([]);
-  }
 
   console.log(Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10))
 

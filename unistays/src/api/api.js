@@ -1,9 +1,5 @@
-// const token = localStorage.getItem("token")
-// console.log(token)
-
-
 export const register = async (args) => {
-    console.log(args.queryKey[1])
+
     const params = {
         email: args.queryKey[1].email,
         password: args.queryKey[1].password,
@@ -26,7 +22,7 @@ export const getRefreshToken = async () => {
         method: "GET",
     });
     const content = await response.json();
-    console.log(content)
+    return content;
 }
 
 export const login = async (args) => {
@@ -60,7 +56,6 @@ export const studentDetails = async (args) => {
     formData.append("phone_number", args.queryKey[1].phone_number);
     formData.append("college", args.queryKey[1].college);
     formData.append("year_of_study", args.queryKey[1].year_of_study);
-    formData.append("allow_show_location", args.queryKey[1].allow_show_location);
 
    documents.forEach((file => {
        formData.append("documents", file);
@@ -96,8 +91,6 @@ export const getStudentDetails = async (args) => {
  export const getLandlordDetails = async (args) => { 
     const email = args.queryKey[1].email
     const token = args.queryKey[1].token
-    console.log(token)
-    console.log(email)
 
     const response = await fetch(`/api/landlords/${email}`,{
         method: "GET",
@@ -139,7 +132,7 @@ export const landlordDetails = async (args) => {
 }
 
 export const postAccomodation = async (args) => {
-    console.log(args.queryKey[1])
+
     const token = args.queryKey[1].token
 
     const propertyFormData = new FormData();
@@ -184,7 +177,7 @@ export const postAccomodation = async (args) => {
         body: propertyFormData
     });
     const content = await response.json();
-    console.log(content);
+    return content;
 }
 
 export const getAccomodations = async (args) => { 
@@ -223,7 +216,7 @@ export const getAccomodations = async (args) => {
  }
 
  export const bookAccomodation = async (args) => {
-    console.log(args.queryKey[1])
+
     const id = args.queryKey[1]._id
     const postingType = args.queryKey[1].postingType
     const token = args.queryKey[1].token
@@ -256,8 +249,6 @@ export const getLandlordProperties = async (args) => {
     var id = args.queryKey[1].id;
     const token = args.queryKey[1].token
 
-    console.log(id)
-
     const response = await fetch(`/api/accomodations/landlord/${id}`,{
         method: "GET",
         headers: {
@@ -275,8 +266,6 @@ export const getLandlordProperties = async (args) => {
 
     var id = args.queryKey[1].id;
     const token = args.queryKey[1].token
-
-    console.log(args.queryKey[1])
 
     const response = await fetch(`/api/accomodations/${id}?action=delete`,{
         method: "POST",
@@ -365,7 +354,6 @@ export const getLandlordProperties = async (args) => {
         body: formData
     });
     const content = await response.json();
-    console.log(content)
     return content;
 }
 
@@ -397,7 +385,6 @@ export const uploadLandlordProfilePicture = async (args) => {
 export const getFriendsLocations = async (args) => {
     const ids = args.queryKey[1].friendsIds
     const token = args.queryKey[1].token
-    console.log(ids)
     const response = await fetch(`/api/accomodations/friends-locations`,{
         method: "POST",
         headers: {

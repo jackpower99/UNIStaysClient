@@ -23,7 +23,6 @@ export default function AccomodationReviews({ acc }) {
     getAccomodationReviews(acc._id).then((reviews) => {
       setReviews(reviews);
     });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   return (
@@ -34,7 +33,6 @@ export default function AccomodationReviews({ acc }) {
             <TableCell >Student</TableCell>
             <TableCell >Review</TableCell>
             <TableCell >Date</TableCell>
-            {/* <TableCell align="right">More</TableCell> */}
           </TableRow>
         </TableHead>
         <TableBody>

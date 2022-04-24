@@ -1,12 +1,10 @@
 import React, {useState} from 'react'
 import { useTheme } from '@mui/material/styles';
-import { makeStyles } from '@material-ui/core';
-import { Container, FormControl, Box, TextField, IconButton, Typography } from '@mui/material';
+import { Container, FormControl, Box, TextField } from '@mui/material';
 import LocalizationProvider from '@mui/lab/LocalizationProvider';
 import MobileDateRangePicker from '@mui/lab/MobileDateRangePicker';
 import DesktopDateRangePicker from '@mui/lab/DesktopDateRangePicker';
 import useMediaQuery from "@material-ui/core/useMediaQuery";
-// date-fns
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import { Button } from '@mui/material';
 import FormGroup from '@mui/material/FormGroup';
@@ -48,7 +46,6 @@ const handleVancancyPriceSectionSubmitButtonClicked = e =>{
   return (
 
     <>
-    {/* <Container className={classes.root}> */}
       <div style={{
       display: 'flex',
       flexWrap: "wrap",
@@ -61,7 +58,6 @@ const handleVancancyPriceSectionSubmitButtonClicked = e =>{
       }}>
 
        <LocalizationProvider dateAdapter={DateAdapter}>
-      {/* <Stack spacing={3}> */}
           {isMobile && 
           
           
@@ -71,7 +67,6 @@ const handleVancancyPriceSectionSubmitButtonClicked = e =>{
           onChange={(newValue) => {
             setDate(newValue);
           }}
-        //   sx={{width: "90vw", flexWrap: "wrap"}}
           renderInput={(startProps, endProps) => (
             <React.Fragment>
               <TextField {...startProps}   sx={{width:"10vw"}} />
@@ -97,7 +92,6 @@ const handleVancancyPriceSectionSubmitButtonClicked = e =>{
           )}
         />
            }
-      {/* </Stack> */}
     </LocalizationProvider>
 
 <FormControl>

@@ -1,6 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/core';
-import { Container, Typography, Paper } from '@mui/material';
+import { Typography, Paper } from '@mui/material';
 import useResponsiveFontSize from "../useResponsiveFontSize";
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
@@ -34,11 +34,7 @@ export default function AgreementCardsDisplay() {
         flexDirection: "column",
         alignItems: "flex-start",
         justifyContent: "flex-start",
-        // minWidth: "90vw",
-        // width: "90vw",
-        // height: "28vh",
         gap: 30,
-       // marginLeft: 'calc(-50vw + 50%)',
         position: "relative",
        },
        mobCard: {
@@ -51,7 +47,6 @@ export default function AgreementCardsDisplay() {
        },
        mobCardContent: {
         padding: 10, 
-        //paddingTop: 15,
         fontSize : 22,
         fontFamily: 'Helvetica',
        },
@@ -66,7 +61,6 @@ export default function AgreementCardsDisplay() {
        },
        cardContent: {
            padding: 10, 
-          // paddingTop: 15,
            fontSize : fontSize,
            fontFamily: 'Helvetica',
        }

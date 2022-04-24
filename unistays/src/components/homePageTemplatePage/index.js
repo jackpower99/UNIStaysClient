@@ -1,16 +1,12 @@
 import React from 'react'
 import Map from '../map'
-import { Container, Grid, Paper, Box, Button, Typography } from '@mui/material';
+import { Grid, Paper, Button } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
 import {useQuery} from "react-query";
 import { getAccomodations } from '../../api/api';
 import AccomodationDetailsTemplate from '../accomodationDetailsTemplate';
-import StripeContainer from '../stripeContainer';
-import WelcomePageCard from '../welcomePageCard';
-import landingImage from '../../resource/images/landing.avif'
 import LandingJPG from '../../resource/images/landingJPG.jpg' 
 import Logo from '../../resource/images/logoForHome.png' 
-import { alpha } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 import AgreementCardsDisplay from '../agreementCardsDisplay';
 import FilterCard from '../filterCard';
@@ -87,8 +83,6 @@ export default function HomePageTemplatePage() {
           },
           logo: {
             position: "relative",
-            // width: "55vw",
-            // height: "45vh",
           },
           logoMob:{
             position: "relative",
@@ -143,8 +137,6 @@ export default function HomePageTemplatePage() {
         }
       );
 
-      console.log(accomodations)
-
   return (
     <div style={{display: "flex", flexDirection: "column",alignItems: "center"}}>
     <Paper elevation={0}>
@@ -177,9 +169,6 @@ export default function HomePageTemplatePage() {
      <AgreementCardsDisplay />
      </div>
     </Paper>
- 
-      {/* <AgreementCardsDisplay /> */}
-
     
     </Paper>
 
@@ -215,9 +204,6 @@ export default function HomePageTemplatePage() {
  accomodationClicked !== null && accomodationClicked !== undefined && Object.getOwnPropertyNames(accomodationClicked).length !== 0 && 
  <AccomodationDetailsTemplate accomodationClicked={accomodationClicked}/>
 }
-
- {/* (accomodationClicked === null || accomodationClicked === undefined || Object.getOwnPropertyNames(accomodationClicked).length === 0) &&
-<WelcomePageCard />  */}
 
   </Grid>
   </Grid>

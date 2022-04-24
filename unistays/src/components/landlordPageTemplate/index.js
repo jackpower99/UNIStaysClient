@@ -49,10 +49,6 @@ export default function LandlordPageTemplate() {
   setMenuItem(selected);
  }
 
- console.log(localStorage.getItem("token"))
-
-console.log(role)
-
  useQuery(
   ["getLandlordDetails", { email: emailLS, token: token }],
   getLandlordDetails,{
@@ -65,7 +61,6 @@ console.log(role)
       console.log(err);
   },
   refetchOnMount: "always",
-  //enabled: role === "Landlord"
   }
 );
 

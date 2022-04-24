@@ -4,7 +4,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
-import { Paper, TextField, FormGroup, FormControlLabel, Checkbox, Button, Radio, RadioGroup } from '@mui/material';
+import { Paper, TextField, FormGroup, FormControlLabel, Button, Radio, RadioGroup } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
 
 const collegesIreland = ["Athlone Institute of Technology", "Carlow College"

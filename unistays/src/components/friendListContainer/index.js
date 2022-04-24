@@ -1,5 +1,5 @@
 import React from 'react'
-import { Paper, Typography, Box, Grid, Divider, TextField } from '@mui/material';
+import { Paper, TextField } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
 import { useQuery } from 'react-query';
 import { getStudents } from '../../api/api';
@@ -18,10 +18,10 @@ export default function FriendListContainer() {
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            //justifyContent: "center",
+          
             width: "25vw",
             height: "85vh",
-            // backgroundColor: "",
+        
             marginTop: '2vh',
             gap: 10,
 
@@ -30,10 +30,10 @@ export default function FriendListContainer() {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
-        //justifyContent: "center",
+       
         width: "70vw",
         height: "85vh",
-        // backgroundColor: "",
+      
         marginTop: '2vh',
         gap: 10,
        },
@@ -68,8 +68,7 @@ export default function FriendListContainer() {
   const [friendToAdd, setFriendToAdd] = React.useState({})
   const [value, setValue] = React.useState('Users');
   const [email, setEmail ] = React.useState(JSON.parse(localStorage.getItem("userEmail")));
-  const [userList, setUserList] = React.useState([])
-  const [friendsReceivedFlag, setFriendsReceivedFlag] = React.useState(false)
+
   const [token, setToken ] = React.useState(localStorage.getItem("token"))
 
   const navigate = useNavigate()
@@ -80,7 +79,6 @@ export default function FriendListContainer() {
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
-    //sortStudentsForListView(students)
   };
 
   useQuery(
@@ -122,7 +120,7 @@ export default function FriendListContainer() {
     onSuccess: (data)=>{
         console.log(data)
         setRunQueryFlag(false)
-        //navigate(0)
+        navigate(0)
     },
     onError: (err) =>{
       console.log(err);

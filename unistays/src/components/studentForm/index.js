@@ -10,15 +10,10 @@ import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
 import Typography from '@mui/material/Typography';
 import { red } from "@material-ui/core/colors";
-import { FormLabel, Hidden } from '@mui/material';
-import useMediaQuery from "@material-ui/core/useMediaQuery";
-import { useTheme } from "@material-ui/core/styles";
-import { Check, CheckBox, WrapText } from "@material-ui/icons";
-import Checkbox from '@mui/material/Checkbox';
+import { FormLabel } from '@mui/material';
 import {DropzoneDialog} from 'material-ui-dropzone'
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { fontSize } from "@mui/system";
 import { useLocation } from "react-router-dom";
 
 const Alert = React.forwardRef(function Alert(props, ref) {
@@ -89,23 +84,18 @@ export default function StudentForm() {
     const [phoneNumber, setPhoneNumber] = React.useState("");
     const [college, setCollege] = React.useState("");
     const [yearOfStudy, setYearOfStudy] = React.useState("");
-    const [allowShowLocation, setAllowShowLocation] = React.useState(false);
     const [files, setFiles] = React.useState([]);
     const [userRole, setUserRole] = React.useState(role);
  
     const [submitFlag, setSubmitFlag] = React.useState(false);
     const [submitLandlordFlag, setSubmitLandlordFlag] = React.useState(false);
-    const [token, setToken ] = React.useState(localStorage.getItem("token"))
     const [attachFilesFlag, setAttachFilesFlag] = React.useState(false);
 
     const [fail, setFail] = React.useState(false);
 
-    const theme = useTheme();
-
     const navigate = useNavigate();
 
 
-      const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
       const classes = useStyles();
 
@@ -119,7 +109,6 @@ export default function StudentForm() {
           phone_number: phoneNumber,
           college: college,
           year_of_study: yearOfStudy,
-          allow_show_location: allowShowLocation,
           documents: files, 
         }],
         studentDetails,{
@@ -367,12 +356,6 @@ return (
              alignContent: "center",
              gap: "2px",
           }}>
-             {userRole === "Student" &&  
-       <FormLabel>Allow Share Location? </FormLabel>
-        }
-          {userRole === "Student" &&  
-       <input type="checkbox" onChange = {e => setAllowShowLocation(!allowShowLocation)} style={{margin: "10px 70px 0 0"}}/>
-      }
        <FormLabel>Attach documents</FormLabel>
        <IconButton onClick={handleAttachFiles}>
         <AttachFileIcon />

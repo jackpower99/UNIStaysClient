@@ -1,5 +1,5 @@
 import React, { useMemo } from "react";
-import { Container, Typography, Paper } from '@mui/material';
+import { Typography, Paper } from '@mui/material';
 import {
   useStripe,
   useElements,
@@ -51,8 +51,6 @@ const SplitForm = (props) => {
   const [success, setSuccess] = React.useState(false)
 
   const token = localStorage.getItem("token")
-
-  const navigate = useNavigate();
 
   const handleSubmit = async event => {
     event.preventDefault();
@@ -110,7 +108,6 @@ const SplitForm = (props) => {
         justifyContent: "center",
         alignContent: "center",
         alignItems: "center",
-        // marginTop: "15vh",
         width:"25vw", 
         height: "40vh",
         backgroundColor: "#FE7E6D",

@@ -1,6 +1,5 @@
 import React from 'react'
-import { Grid, Typography, Paper } from '@mui/material';
-import { makeStyles } from "@material-ui/core/styles";
+import { Typography, Paper } from '@mui/material';
 import AccomodationList from '../accomodationList';
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";

@@ -1,7 +1,7 @@
 import React from 'react'
 import logo from "../../resource/images/mainLogo.png";
 import { makeStyles } from '@material-ui/core';
-import { Container, Paper, Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 
 export default function WelcomePageCard() {
 
@@ -23,13 +23,8 @@ export default function WelcomePageCard() {
 <>
 <Paper elevation={2} className={classes.root}>
 
-    {/* <div style={{ display : "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignContent: "center",
-            alignItems: "center",}}> */}
     <img src={logo} alt="logo"></img>
-    {/* </div> */}
+
     
     <Paper sx={{display : "flex",
             flexDirection: "column",

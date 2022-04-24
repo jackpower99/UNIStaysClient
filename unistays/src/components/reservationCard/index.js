@@ -6,7 +6,6 @@ import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from '@mui/material/styles';
 import DateAdapter from '@mui/lab/AdapterDateFns';
 import { makeStyles } from '@material-ui/core';
-import dayjs from 'dayjs';
 import {useQuery} from "react-query";
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -19,10 +18,9 @@ import ProcessPaymentStripe from '../processPaymentStripe';
 import ToggleDays from '../toggleDays';
 import moment from 'moment'
 
-import { Container, FormControl, Box, TextField, IconButton, Typography, Paper, Button } from '@mui/material';
+import { Box, TextField, Typography, Paper, Button } from '@mui/material';
 
 import { bookAccomodation } from '../../api/api';
-import { getTime, set } from 'date-fns';
 
 export default function ReservationCard(props) {
 
@@ -51,21 +49,11 @@ const navigate = useNavigate();
     const[paymentNights, setPaymentNights] = React.useState(0)
 
     const [UNIBNBDates, setUNIBNBDates] = React.useState([])
-    const [UNIBNBDaysCount, setUNIBNBDaysCount] = React.useState(getDayDifference(date[0], date[1]))
 
     var alreadyBookedDatesParsed = []
     alreadyBookedDates.forEach(i =>{
       alreadyBookedDatesParsed = [...alreadyBookedDatesParsed, new Date(i)]
     })
-
-    // var alreadyBookedDatesParsedAddedDay =[];
-    // alreadyBookedDatesParsed.forEach(i=>{
-    //   alreadyBookedDatesParsedAddedDay=[...alreadyBookedDatesParsedAddedDay, new Date(i.setTime(i.getTime() + dateOffset))]
-    // })
-
-    //const [alreadyBookedDatesParsed, setAlreadyBookedDatesParsed] = React.useState(temp)
-
-    console.log(alreadyBookedDates)
 
     const [submitFlag, setSubmitFlag] = React.useState(false)
 
@@ -76,8 +64,6 @@ const navigate = useNavigate();
     const [processPaymentFlag, setProcessPaymentFlag] = React.useState(false);
 
     const [token, setToken ] = React.useState(localStorage.getItem("token"))
-
-    const[paymentSuccess, setPaymentSuccess] = React.useState(false)
 
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -161,15 +147,6 @@ function getMonthDifference(startDate, endDate) {
       12 * (endDate.getFullYear() - startDate.getFullYear())
     );
   }
-
-function getDayDifference(startDate, endDate) {
-
-var Difference_In_Time = endDate.getTime() - startDate.getTime()  
-var Difference_In_Days = Difference_In_Time / (1000 * 3600 * 24)
-console.log(Difference_In_Days)
-return Difference_In_Days;
-
-}
 
 const getUNIFlexNumberOfDays = (start, end, days) => {
 
@@ -278,7 +255,6 @@ const continueUNIFlexWithoutConflicts = (e) => {
       }
       }
     setUNIFlexDates(temp);
-    //setSubmitFlag(true)
     processPayment()
     setOpen(false)
     }

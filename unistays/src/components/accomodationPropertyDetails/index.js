@@ -1,10 +1,7 @@
 import React from 'react'
-import { Typography, Paper, Chip, Container } from '@mui/material';
+import { Typography, Paper, Container } from '@mui/material';
 import { makeStyles } from "@material-ui/core/styles";
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
 import { Buffer } from 'buffer';
-
 import Box from '@mui/material/Box';
 import MobileStepper from '@mui/material/MobileStepper';
 import Button from '@mui/material/Button';
@@ -44,7 +41,6 @@ export default function AccomodationPropertyDetails(props) {
         paper: {
             margin: 2,
             padding: 2,
-           // width: "20vw",
         },
         isMobilePic: {
           width: "95vw"
@@ -53,14 +49,6 @@ export default function AccomodationPropertyDetails(props) {
         maxWidth: "32vw", 
         flexGrow: 1 
       }
-
-    //     chip: {
-    //       margin: theme.spacing(0.5),
-    //     },
-    //     // '& .MuiPaper-root': {
-    //     //     backgroundColor: "#FFFFFF",
-    //     //     margin: theme.spacing(2),
-    //     // }
     }))
 
     const { accomodationClicked, accomodationTypeClicked } = props;
@@ -110,9 +98,6 @@ export default function AccomodationPropertyDetails(props) {
                 sx={{
                   height: "25vh",
                   display: 'block',
-                //   marginLeft: "auto",
-                //   marginRight: "auto",
-                //  maxWidth: "40vw",
                   overflow: 'hidden',
                   width: '100%',
                 }}
@@ -289,48 +274,19 @@ export default function AccomodationPropertyDetails(props) {
 
       </div>
       <Fab
-       // color="secondary"
         sx={{backgroundColor: "#FE7E6D", color: "white"}}
         variant="extended"
         onClick={() =>setDrawerOpen(true)}
-       // className={classes.fab}
       >
         <NavigationIcon />
         Reviews
       </Fab>
       <Drawer anchor="top" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
         <AccomodationReviews acc ={accomodationClicked}/>
-        {/* <MovieReviews movie={movie} /> */}
       </Drawer>
     </>
 
-
-    {/* <Paper component="ul" className={classes.root}>
-      <li>
-        <Chip label="Genres" className={classes.chip} color="primary" />
-      </li>
-      {genreNames.map((g) => (
-        <li key={g.name}>
-          <Chip label={g.name} className={classes.chip} />
-        </li>
-      ))}
-    </Paper> */}
-    {/* <Paper component="ul" className={classes.root}>
-      <Chip
-        icon={<StarRate />}
-        label={`${movie.vote_average} (${movie.vote_count}`}
-      />
-      <Chip label={`Released: ${movie.release_date}`} />
-    </Paper> */}
-    {/* </div> */}
        </Container>
     </>
   )
-// else{
-//     return(
-//         <div>
-//             lol
-//         </div>
-//     )
-// }
 }

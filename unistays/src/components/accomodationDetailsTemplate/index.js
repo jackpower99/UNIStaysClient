@@ -1,5 +1,5 @@
 import React from 'react'
-import { Container, makeStyles, Grid } from '@material-ui/core';
+import {  Grid } from '@material-ui/core';
 import AccomodationPropertyDetails from '../accomodationPropertyDetails';
 import ReservationCard from '../reservationCard';
 import useMediaQuery from "@material-ui/core/useMediaQuery";
@@ -16,15 +16,6 @@ function AccomodationDetailsTemplate(props) {
     const [accTypeClicked, setAccTypeClicked] = React.useState("")
 
     const [disabled, setDisabled] = React.useState(true)
-
-    const useStyles = makeStyles(theme => ({
-        root: {
-            height: "80vh",
-            width: "30vw",
-          }
-      }));
-
-const classes = useStyles();
 
 React.useEffect(() => {
   setAccTypeClicked("")
