@@ -38,9 +38,11 @@ export default function LandlordPageTemplate() {
  const [ studentBookings, setStudentBookings ] = useState([]);
 
  const landlordRestructured = (existingLandlord) => {
+   if(role === "Landlord"){
   setLandlord((({ email, fname, lname, address, date_of_birth, phone_number, documents, properties, profile_picture}) => 
  ({ email, fname, lname, address, date_of_birth, phone_number, documents, properties, profile_picture}))(existingLandlord));
  }
+}
 
  const handleMenuItemSelected = (selected) => { 
    if(landlordId) setMenuChangeRunQueryFlag(true);
@@ -55,9 +57,9 @@ console.log(role)
   ["getLandlordDetails", { email: emailLS, token: token }],
   getLandlordDetails,{
   onSuccess: (data)=>{
-    landlordRestructured(data.existingLandlord)
-    setLandlordId(data.existingLandlord._id)
-    localStorage.setItem("landlordId", data.existingLandlord._id)
+    landlordRestructured(data?.existingLandlord)
+    setLandlordId(data?.existingLandlord?._id)
+    localStorage.setItem("landlordId", data?.existingLandlord?._id)
   },
   onError: (err) =>{
       console.log(err);
@@ -71,10 +73,9 @@ useQuery(
   ["getStudentDetails", { email: emailLS, token: token }],
   getStudentDetails,{
   onSuccess: (data)=>{
-    console.log(data)
-    setStudentId(data.existingStudent._id)
-    setStudent(data.existingStudent)
-    localStorage.setItem("studentId", data.existingStudent._id)
+    setStudentId(data?.existingStudent?._id)
+    setStudent(data?.existingStudent)
+    localStorage.setItem("studentId", data?.existingStudent?._id)
   },
   onError: (err) =>{
       console.log(err);

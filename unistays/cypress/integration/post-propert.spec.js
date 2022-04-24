@@ -28,13 +28,13 @@ describe("Student Form", () => {
 
 
         cy.visit("/")
-        cy.get('.MuiToolbar-root > :nth-child(5)').click()
+        cy.get('.MuiToolbar-root > :nth-child(4)').click()
           cy.get(':nth-child(3) > .MuiInputBase-root > .MuiInputBase-input').clear().type(newLandlord.email)
           cy.get(':nth-child(4) > .MuiInputBase-root > .MuiInputBase-input').clear().type(newLandlord.password)
           cy.get(':nth-child(6) > .MuiButtonBase-root').click()
           cy.wait(5000)
 
-          cy.get('.MuiToolbar-root > :nth-child(4)').click()
+          cy.get('.MuiToolbar-root > :nth-child(3)').click()
     })
 
     describe("Base test", () => {

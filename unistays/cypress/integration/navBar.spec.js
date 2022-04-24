@@ -59,7 +59,7 @@ describe("Navigation", () => {
             });
             it("Navigation to landlord register on button click", () => {
                 cy.visit("/");
-                cy.get(':nth-child(2) > .MuiButton-root').click()
+                cy.get('.css-oux40l-MuiGrid-root > .MuiButton-root').click()
                 cy.url().should('include', '/register')
             });
           });
@@ -68,20 +68,20 @@ describe("Navigation", () => {
           describe("Check NavBar Buttons", () => {
             it("Navigate to profile page if logged in user", () => {
               cy.visit("/")
-              cy.get('.MuiToolbar-root > :nth-child(5)').click()
+              cy.get('.MuiToolbar-root > :nth-child(4)').click()
                 cy.get(':nth-child(3) > .MuiInputBase-root > .MuiInputBase-input').clear().type(newStudent.email)
                 cy.get(':nth-child(4) > .MuiInputBase-root > .MuiInputBase-input').clear().type(newStudent.password)
                 cy.get(':nth-child(6) > .MuiButtonBase-root').click()
-
-                cy.get('.MuiToolbar-root > :nth-child(4)').click()
+                cy.wait(500)
+                cy.get('.MuiToolbar-root > :nth-child(3)').click()
                 cy.url().should('include', '/profile')
             });
 
             it("Navigation to login if not logged in user", () => {
                 cy.visit("/");
-                cy.get('.MuiToolbar-root > :nth-child(5)').click()
-                cy.wait(500)
                 cy.get('.MuiToolbar-root > :nth-child(4)').click()
+                cy.wait(500)
+                cy.get('.MuiToolbar-root > :nth-child(3)').click()
                 cy.url().should('include', '/login')
             });
           });
