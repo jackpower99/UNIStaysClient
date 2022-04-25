@@ -18,6 +18,13 @@ import {useQuery} from "react-query";
 import { postAccomodation } from '../../api/api';
 import { useNavigate } from 'react-router-dom';
 import moment from 'moment';
+import Snackbar from '@mui/material/Snackbar';
+import MuiAlert from '@mui/material/Alert';
+import { red } from "@material-ui/core/colors";
+
+const Alert = React.forwardRef(function Alert(props, ref) {
+  return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
+});
 
 const ITEM_HEIGHT = 48;
 const ITEM_PADDING_TOP = 8;
@@ -135,6 +142,7 @@ export default function PostVacancy() {
       const [sizeSquareMeters, setSizeSquareMeters] = React.useState(0)
       const [roomsArray, setRoomsArray] = React.useState([]);
       const [token, setToken ] = React.useState(localStorage.getItem("token"))
+      const [fail, setFail] = React.useState(false);
 
       const [lat, setLat] = React.useState(0);
       const [lng, setLng] = React.useState(0);
@@ -217,6 +225,12 @@ export default function PostVacancy() {
         setAttachFilesFlag(false);
         };
 
+        const handleClose = (event, reason) => {
+          if (reason === 'clickaway') {
+            return;
+          }
+          setFail(false);
+        };
 
       const handleChange = (event) => {
         setType(event.target.value);
@@ -289,7 +303,11 @@ export default function PostVacancy() {
           console.log(1111)
           setSubmitFlag(true);
         }
-      }
+          else{
+            setFail(true)
+            console.log("failed accomodation upload")
+          }
+        }
 
       const getPriceSectionValues = async (values) =>{
         console.log(values)
@@ -539,6 +557,12 @@ export default function PostVacancy() {
 { vacancyPriceSectionVisibleFlag && 
         <VacancyPriceSection callbackGetPriceSectionDetails={getPriceSectionValues} />
 }
+
+<Snackbar open={fail} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
+          Oops! Unable to Submit your details! Check your details and try again..
+        </Alert>
+        </Snackbar>
 </div>
 )
 }

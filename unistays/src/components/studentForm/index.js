@@ -382,7 +382,7 @@ return (
         </Snackbar>
 
         <DropzoneDialog 
-        dialogTitle={"Upload any documents you would like landlords to see here."}
+        dialogTitle={role==="Student" ? "Upload any documents you would like landlords to see here." : "Upload any documents you would like students to see here." }
         open={attachFilesFlag}
         onClose={() => setAttachFilesFlag(false)}
         onSave={(files) => handleSave(files)}
