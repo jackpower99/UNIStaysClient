@@ -298,8 +298,9 @@ export default function PostVacancy() {
      
       };
 
-      const handleSubmit =  async () => {
-        if(zip !== "" && address !== "" && date){
+      const handleSubmit = () => {
+        console.log(1111)
+        if(zip !== "" && address !== "" && date[0]!== null && date[1]!==null ){
           console.log(1111)
           setSubmitFlag(true);
         }
@@ -312,6 +313,7 @@ export default function PostVacancy() {
       const getPriceSectionValues = async (values) =>{
         console.log(values)
           const res = await getLatLng();
+          if(res.results.length > 0){
           setLat(res.results[0].geometry.location.lat)
           setLng(res.results[0].geometry.location.lng)
           setDate(values.date)
@@ -320,6 +322,8 @@ export default function PostVacancy() {
           setUniBNBAvailable(values.UNIBNBChecked)
           setUniFlexAvailable(values.UNIFlexChecked)
           handleSubmit()
+          }
+          setFail(true)
       }
 
       const getLatLng = async() => {
