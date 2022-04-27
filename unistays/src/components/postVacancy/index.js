@@ -299,9 +299,7 @@ export default function PostVacancy() {
       };
 
       const handleSubmit = () => {
-        console.log(1111)
-        if(zip !== "" && address !== "" && date[0]!== null && date[1]!==null ){
-          console.log(1111)
+        if(zip !== "" && address !== ""){
           setSubmitFlag(true);
         }
           else{
@@ -323,7 +321,9 @@ export default function PostVacancy() {
           setUniFlexAvailable(values.UNIFlexChecked)
           handleSubmit()
           }
+          else{
           setFail(true)
+          }
       }
 
       const getLatLng = async() => {

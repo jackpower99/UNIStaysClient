@@ -181,12 +181,12 @@ export const postAccomodation = async (args) => {
 }
 
 export const getAccomodations = async (args) => { 
-    const token = args.queryKey[1].token
+   // const token = args.queryKey[1].token
 
     const response = await fetch(`https://unistaysherokuserver.herokuapp.com/api/accomodations`,{
         method: "GET",
         headers: {
-        'Authorization': token,
+       // 'Authorization': token,
         'Content-Type': 'application/json',
         "Accepts":"application/json"
         },
