@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Map from '../map'
 import { Grid, Paper, Button } from '@mui/material';
 import { makeStyles } from '@material-ui/core';
@@ -24,9 +24,14 @@ export default function HomePageTemplatePage() {
       const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
       const [accomodations, setAccomodations] = React.useState([])
+      const [filteredAccomodations, setFilteredAccomodations] = useState([])
       const [accomodationClicked, setAccomodationClicked] = React.useState({});
       const [showFilterCard, setShowFilterCard] = React.useState(false)
       const [filterCardOpen, setFilterCardOpen] = React.useState(false)
+
+      const [accsFetched, setAccsFetched] = React.useState([])
+
+      const [filterFlag, setFilterFlag] = React.useState(false)
 
       const [token, setToken ] = React.useState(localStorage.getItem("token"))
 
@@ -44,8 +49,15 @@ export default function HomePageTemplatePage() {
         setAccomodationClicked(accomodation);
       }
 
-      const filterAccomodationsCallBack = (accs) =>{
-        setAccomodations(accs)
+      const filterAccomodationsCallBack = (accs, type) =>{
+        if(type === "Filter"){
+        setFilterFlag(true)
+        setFilteredAccomodations(accs)
+        setAccomodations(accsFetched)
+        } else{
+          setFilterFlag(false)
+          setAccomodations(accsFetched)
+        }
       }
 
       React.useEffect(() => {
@@ -129,6 +141,7 @@ export default function HomePageTemplatePage() {
         getAccomodations,{
         onSuccess: (data)=>{
             setAccomodations(data)
+            setAccsFetched(data)
         },
         onError: (err) =>{
           console.log(err);
@@ -196,7 +209,7 @@ export default function HomePageTemplatePage() {
     
     <Grid container spacing={3}>
     <Grid item xs={isMobile ? 12 : 6}>
-  <Map mapStyle={mapContainerStyle} accomodations={accomodations} clickedAccomodationCallbackFunction={clickedAccomodationCallbackFunction}/>
+  <Map mapStyle={mapContainerStyle} accomodations={filterFlag === true ? filteredAccomodations: accomodations} clickedAccomodationCallbackFunction={clickedAccomodationCallbackFunction}/>
   </Grid>
   <Grid item xs={isMobile ? 12 : 6}>
 

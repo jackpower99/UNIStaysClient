@@ -88,6 +88,7 @@ export default function FilterCard(props) {
       }
 
       const clearFilters =()=>{
+        filterAccomodationsCallBack(accomodations, "Clear")
         setCollege("")
         setCounty("")
         setBeds(0)
@@ -104,9 +105,6 @@ export default function FilterCard(props) {
       const filterAccomodations = (e) =>{
           e.preventDefault()
 
-          console.log(baths)
-
-          console.log(accomodations)
           var temp = accomodations
             .filter(acc => {
                 if(county === ""){
@@ -179,8 +177,7 @@ export default function FilterCard(props) {
                 }
                 return false;
             })
-           filterAccomodationsCallBack(temp)
-            console.log(temp)
+           filterAccomodationsCallBack(temp, "Filter")
         }
 
   return (

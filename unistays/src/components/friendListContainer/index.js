@@ -145,18 +145,21 @@ export default function FriendListContainer() {
       }
       else{
 
-      var temp = []
+      var temp = [];
       
         const studentsNotMe = stus
         .filter(student => student.student_email !== email)
+
+        console.log(studentsNotMe)
+        console.log(friends)
 
         for(var i =0; i < studentsNotMe.length; i++){
           if(friends?.find(f => f._id === studentsNotMe[i]._id) === undefined){
             temp = [...temp, studentsNotMe[i]]
           }
-          console.log(temp)
-          return temp
         }
+        console.log(temp)
+        return temp
     }
   }else{
     return null;

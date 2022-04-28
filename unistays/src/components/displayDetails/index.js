@@ -10,6 +10,7 @@ import prop from '../../resource/images/Portrait_Placeholder.png'
 import useMediaQuery from "@material-ui/core/useMediaQuery";
 import { useTheme } from "@material-ui/core/styles";
 import { useNavigate } from 'react-router-dom';
+import moment from 'moment'
 
 export default function DisplayDetails( { role, user } ) {
 
@@ -20,7 +21,6 @@ export default function DisplayDetails( { role, user } ) {
   const [objURL, setObjURL] = React.useState("")
   const [token, setToken ] = React.useState(localStorage.getItem("token"))
   const navigate = useNavigate()
-
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
@@ -73,8 +73,6 @@ export default function DisplayDetails( { role, user } ) {
     }
   );
 
-  console.log(Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10))
-
   const handleSave = (f) => {
     //Saving files to state for further use and closing Modal
     setUserImages(f);
@@ -115,7 +113,7 @@ export default function DisplayDetails( { role, user } ) {
   }));
 
   const classes = useStyles();
-
+ 
   return (
 <>
 { !isMobile && 
@@ -167,7 +165,7 @@ export default function DisplayDetails( { role, user } ) {
          </>
             <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Date of Birth: {user.date_of_birth}</Typography>
  
-            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Age: { Math.floor((new Date() - new Date(user.date_of_birth).getTime()) / 3.15576e+10) }</Typography>
+            <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Age: { Math.floor((new Date() - moment(user.date_of_birth,"DD/MM/YYYY").toDate().getTime()) / 3.15576e+10) }</Typography>
 
             <Typography sx={{fontSize: 20,fontFamily: '"Segoe UI"'}} variant='p'>Phone: {user.phone_number}</Typography>
    
